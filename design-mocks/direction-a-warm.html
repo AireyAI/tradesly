@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tradesly — Direction A: Warm Trust</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #C2410C;          /* warm terracotta */
+    --color-primary-dark: #9A3412;
+    --color-primary-light: #FED7AA;
+    --color-accent: #166534;            /* deep verified-green */
+    --color-bg: #FFFBF5;                /* warm off-white */
+    --color-surface: #FFFFFF;
+    --color-text: #1C1917;              /* warm near-black */
+    --color-muted: #78716C;             /* warm grey */
+    --color-border: #E7E5E4;
+
+    --shadow-sm: 0 1px 2px rgba(28,25,23,0.04), 0 1px 3px rgba(194,65,12,0.06);
+    --shadow-md: 0 4px 6px rgba(28,25,23,0.04), 0 10px 24px rgba(194,65,12,0.08);
+    --shadow-lg: 0 12px 32px rgba(28,25,23,0.08), 0 24px 60px rgba(194,65,12,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--color-bg); color: var(--color-text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  /* Subtle grain overlay */
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; opacity:.4; z-index:0;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* Top nav */
+  nav {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px;
+    max-width: 1280px; margin: 0 auto;
+  }
+  .logo { font-family: 'Fraunces', serif; font-weight: 600; font-size: 28px; color: var(--color-text); letter-spacing: -0.02em; }
+  .logo span { color: var(--color-primary); }
+  nav .links { display: flex; gap: 32px; font-size: 15px; color: var(--color-muted); font-weight: 500; }
+  nav .links a { color: inherit; text-decoration: none; transition: color 200ms; }
+  nav .links a:hover { color: var(--color-text); }
+  nav .cta-mini {
+    background: var(--color-text); color: white; padding: 10px 20px;
+    border-radius: 999px; text-decoration: none; font-weight: 500; font-size: 14px;
+    transition: transform 200ms;
+  }
+  nav .cta-mini:hover { transform: translateY(-1px); }
+
+  /* Hero */
+  .hero {
+    position: relative; z-index: 1;
+    max-width: 1280px; margin: 0 auto;
+    padding: 80px 48px 120px;
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center;
+  }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--color-primary-light); color: var(--color-primary-dark);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+  .pill::before {
+    content:''; width: 6px; height: 6px; background: var(--color-primary); border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(194,65,12,0.15);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 76px; line-height: 0.98; letter-spacing: -0.04em;
+    color: var(--color-text);
+    margin-bottom: 24px;
+  }
+  h1 em {
+    font-style: italic; color: var(--color-primary);
+    font-weight: 500;
+  }
+  .subtitle {
+    font-size: 19px; line-height: 1.55; color: var(--color-muted);
+    max-width: 480px; margin-bottom: 36px;
+  }
+
+  /* CTA group */
+  .cta-row { display: flex; gap: 12px; align-items: center; margin-bottom: 40px; }
+  .cta-primary {
+    background: var(--color-text); color: white;
+    padding: 16px 28px; border-radius: 999px;
+    font-weight: 500; font-size: 16px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 10px;
+    box-shadow: var(--shadow-md);
+    transition: transform 200ms, box-shadow 200ms;
+  }
+  .cta-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .cta-primary svg { transition: transform 200ms; }
+  .cta-primary:hover svg { transform: translateX(2px); }
+  .cta-secondary {
+    color: var(--color-text); padding: 16px 24px;
+    font-weight: 500; font-size: 16px; text-decoration: none;
+    border-radius: 999px;
+  }
+  .cta-secondary:hover { background: rgba(0,0,0,0.04); }
+
+  /* Trust bar */
+  .trust-row {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    font-size: 14px; color: var(--color-muted);
+  }
+  .trust-row .item { display: flex; align-items: center; gap: 8px; }
+  .trust-row svg { color: var(--color-accent); }
+
+  /* Right side — quote card stack */
+  .quote-stack { position: relative; height: 520px; }
+  .quote-card {
+    position: absolute; left: 0; right: 0;
+    background: var(--color-surface);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+  }
+  .quote-card .head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .qc-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, #FED7AA, #FB923C);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-size: 18px;
+  }
+  .qc-name { font-weight: 600; font-size: 15px; color: var(--color-text); }
+  .qc-trade { font-size: 13px; color: var(--color-muted); }
+  .qc-rating { display: flex; gap: 2px; color: #F59E0B; font-size: 14px; margin-left: auto; }
+  .qc-quote {
+    font-size: 22px; font-family: 'Fraunces', serif; font-weight: 500;
+    line-height: 1.3; letter-spacing: -0.01em;
+    color: var(--color-text);
+    margin-bottom: 16px;
+  }
+  .qc-meta {
+    display: flex; justify-content: space-between; padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+    font-size: 13px; color: var(--color-muted);
+  }
+  .qc-price { color: var(--color-primary-dark); font-weight: 700; font-size: 16px; }
+
+  .quote-card.c1 { top: 0; transform: rotate(-2deg); z-index: 3; }
+  .quote-card.c2 { top: 180px; transform: rotate(1deg); z-index: 2; left: 20px; right: -20px; }
+  .quote-card.c3 { top: 360px; transform: rotate(-1deg); z-index: 1; }
+
+  .quote-card.c2 { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; border: none; }
+  .quote-card.c2 .qc-name, .quote-card.c2 .qc-quote { color: white; }
+  .quote-card.c2 .qc-trade, .quote-card.c2 .qc-meta { color: rgba(255,255,255,0.75); }
+  .quote-card.c2 .qc-meta { border-top-color: rgba(255,255,255,0.2); }
+  .quote-card.c2 .qc-price { color: white; }
+  .quote-card.c2 .qc-avatar { background: rgba(255,255,255,0.2); }
+
+  /* Palette swatch + type sample (footer of mock) */
+  .design-meta {
+    max-width: 1280px; margin: 0 auto; padding: 60px 48px 80px;
+    border-top: 1px solid var(--color-border);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  }
+  .design-meta h3 { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-muted); margin-bottom: 20px; }
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch { width: 56px; height: 80px; border-radius: 12px; display: flex; align-items: end; justify-content: center; padding: 8px; font-size: 9px; font-family: monospace; color: rgba(0,0,0,0.5); border: 1px solid var(--color-border); }
+  .type-sample { font-family: 'Fraunces', serif; }
+  .type-sample .display { font-size: 36px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
+  .type-sample .body { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--color-muted); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 40px 24px 80px; gap: 60px; }
+    h1 { font-size: 48px; }
+    .quote-stack { height: 460px; }
+    nav { padding: 20px 24px; }
+    nav .links { display: none; }
+    .design-meta { grid-template-columns: 1fr; padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">trades<span>ly.</span></div>
+  <div class="links">
+    <a href="#">How it works</a>
+    <a href="#">For tradespeople</a>
+    <a href="#">Trades we cover</a>
+  </div>
+  <a href="#" class="cta-mini">Get free quotes</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="pill">Vetted UK trades · Free to use</div>
+    <h1>Free quotes.<br>Vetted trades.<br><em>Sorted.</em></h1>
+    <p class="subtitle">Tell us what you need. We match you with up to three local pros — usually within 24 hours. No fees, no obligation, no pressure.</p>
+    <div class="cta-row">
+      <a href="#" class="cta-primary">Get free quotes
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="cta-secondary">How it works →</a>
+    </div>
+    <div class="trust-row">
+      <div class="item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>GDPR-compliant</span>
+      </div>
+      <div class="item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Free for homeowners</span>
+      </div>
+      <div class="item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>UK trades only</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-stack">
+    <div class="quote-card c1">
+      <div class="head">
+        <div class="qc-avatar">JM</div>
+        <div>
+          <div class="qc-name">James M.</div>
+          <div class="qc-trade">Loft conversion · M20</div>
+        </div>
+        <div class="qc-rating">★★★★★</div>
+      </div>
+      <div class="qc-quote">"Hip-to-gable conversion with dormer to rear, full planning + building regs."</div>
+      <div class="qc-meta">
+        <span>Quote ready</span>
+        <span class="qc-price">£42,500</span>
+      </div>
+    </div>
+
+    <div class="quote-card c2">
+      <div class="head">
+        <div class="qc-avatar">AP</div>
+        <div>
+          <div class="qc-name">A. Patel Heating</div>
+          <div class="qc-trade">Air-source heat pump · MCS-certified</div>
+        </div>
+        <div class="qc-rating" style="color:#FED7AA">★★★★★</div>
+      </div>
+      <div class="qc-quote">"7kW air-source unit, BUS grant applied (£7,500 off), commissioning included."</div>
+      <div class="qc-meta">
+        <span>After £7,500 grant</span>
+        <span class="qc-price">£8,940</span>
+      </div>
+    </div>
+
+    <div class="quote-card c3">
+      <div class="head">
+        <div class="qc-avatar">SK</div>
+        <div>
+          <div class="qc-name">Sara K. Solar</div>
+          <div class="qc-trade">Solar PV + battery · M19</div>
+        </div>
+        <div class="qc-rating">★★★★★</div>
+      </div>
+      <div class="qc-quote">"4.2kW system + 5kWh battery, MCS-certified install."</div>
+      <div class="qc-meta">
+        <span>Quote ready</span>
+        <span class="qc-price">£11,200</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="design-meta">
+  <div>
+    <h3>Palette — Warm Trust</h3>
+    <div class="swatches">
+      <div class="swatch" style="background:#C2410C;color:white">#C2410C</div>
+      <div class="swatch" style="background:#9A3412;color:white">#9A3412</div>
+      <div class="swatch" style="background:#FED7AA">#FED7AA</div>
+      <div class="swatch" style="background:#166534;color:white">#166534</div>
+      <div class="swatch" style="background:#FFFBF5">#FFFBF5</div>
+      <div class="swatch" style="background:#1C1917;color:white">#1C1917</div>
+      <div class="swatch" style="background:#78716C;color:white">#78716C</div>
+    </div>
+  </div>
+  <div>
+    <h3>Type — Fraunces (display) + Inter (UI)</h3>
+    <div class="type-sample">
+      <div class="display">Trades you can <em>actually</em> trust.</div>
+      <div class="body">Fraunces brings warmth and editorial gravitas to display headlines, paired with Inter for crystal-clear UI and body. Italic Fraunces accents key emotional words. Reads like a quality magazine, not a spreadsheet.</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

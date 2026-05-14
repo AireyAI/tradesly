@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0A1F">
+
+<title>Heat pump quotes — Tradesly</title>
+<meta name="description" content="Free quotes for air source, ground source and hybrid heat pumps from MCS-certified UK installers. Boiler Upgrade Scheme grants (£7,500) applied automatically.">
+<link rel="canonical" href="https://tradesly.co.uk/heat-pumps">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tradesly.co.uk/heat-pumps">
+<meta property="og:title" content="Heat pump quotes — Tradesly">
+<meta property="og:description" content="Free quotes from MCS-certified installers. £7,500 BUS grant applied automatically.">
+<meta property="og:site_name" content="Tradesly">
+<meta property="og:image" content="https://tradesly.co.uk/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Design system -->
+<link rel="stylesheet" href="/tokens.css">
+
+<style>
+  /* Top nav (shared with homepage) */
+  .nav-wrap {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(20px) saturate(140%);
+    background: rgba(10,10,31,0.65);
+    border-bottom: 1px solid var(--color-border);
+  }
+  nav.top {
+    display: flex; align-items: center; justify-content: space-between;
+    height: var(--nav-height);
+    max-width: var(--container-max); margin: 0 auto; padding: 0 var(--space-9);
+  }
+  .logo { display: flex; align-items: center; gap: var(--space-3); font-weight: 600; font-size: 22px; letter-spacing: var(--tracking-snug); color: var(--color-text-strong); }
+  .logo-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--gradient-brand); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(99,102,241,0.45); color: white; font-weight: 700; }
+  .logo-mark::before { content:'⌬'; }
+  nav.top .links { display: flex; gap: var(--space-7); font-size: var(--fs-body-sm); font-weight: 500; color: var(--color-text-muted); }
+  nav.top .links a:hover { color: var(--color-text-strong); }
+  @media (max-width: 800px) {
+    nav.top { padding: 0 var(--space-6); }
+    nav.top .links { display: none; }
+  }
+
+  /* Breadcrumb */
+  .crumbs {
+    padding: var(--space-7) 0 0;
+    font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-muted);
+    letter-spacing: var(--tracking-mono);
+  }
+  .crumbs a { color: inherit; }
+  .crumbs a:hover { color: var(--color-text); }
+  .crumbs .sep { margin: 0 var(--space-3); color: var(--color-text-subtle); }
+  .crumbs .current { color: var(--color-text); }
+
+  /* Hero (niche-specific) */
+  .hero { position: relative; z-index: 1; padding: var(--space-10) 0 var(--space-11); }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: var(--space-11); align-items: start; }
+  .hero h1 { margin-bottom: var(--space-6); }
+  .hero .subtitle { font-size: var(--fs-body-lg); line-height: var(--lh-relaxed); color: var(--color-text-muted); max-width: 480px; margin-bottom: var(--space-7); }
+  .hero .grant-badge {
+    display: inline-flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
+    background: linear-gradient(135deg, rgba(34,197,94,0.14), rgba(34,211,238,0.06));
+    border: 1px solid rgba(34,197,94,0.30);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-7);
+  }
+  .grant-badge .label { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-success); letter-spacing: var(--tracking-mono); text-transform: uppercase; }
+  .grant-badge .amount { font-weight: 600; color: var(--color-text); font-size: var(--fs-body); }
+  .hero-bullets { display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-7); }
+  .hero-bullets li { display: flex; gap: var(--space-3); align-items: flex-start; font-size: var(--fs-body); color: var(--color-text); }
+  .hero-bullets li svg { color: var(--color-accent); margin-top: 4px; flex-shrink: 0; }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: var(--space-9); }
+    .hero { padding: var(--space-8) 0 var(--space-10); }
+  }
+
+  /* Lead form panel */
+  .lead-panel {
+    background: linear-gradient(180deg, rgba(20,20,43,0.94), rgba(20,20,43,0.82));
+    border: 1px solid var(--color-border-brand);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-glow);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    position: sticky; top: calc(var(--nav-height) + var(--space-5));
+  }
+  .lead-panel-head { padding: var(--space-7) var(--space-7) var(--space-5); border-bottom: 1px solid var(--color-border); }
+  .lead-panel-head .pill { margin-bottom: var(--space-4); }
+  .lead-panel-head h2 { font-size: 26px; line-height: 1.2; letter-spacing: var(--tracking-snug); margin-bottom: var(--space-2); }
+  .lead-panel-head p { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+
+  .lead-form { padding: var(--space-7); display: flex; flex-direction: column; gap: var(--space-5); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+  @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+  .submit-row { display: flex; flex-direction: column; gap: var(--space-3); }
+  .form-microcopy { font-size: var(--fs-micro); color: var(--color-text-subtle); text-align: center; font-family: var(--font-mono); letter-spacing: var(--tracking-mono); }
+
+  /* Success state */
+  .lead-success { display: none; padding: var(--space-9) var(--space-7); text-align: center; }
+  .lead-success.shown { display: block; }
+  .lead-form.hidden { display: none; }
+  .success-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-success), var(--color-accent));
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white; font-size: 32px; margin-bottom: var(--space-5);
+    box-shadow: 0 12px 32px rgba(34,197,94,0.35);
+  }
+  .lead-success h3 { font-size: var(--fs-h4); margin-bottom: var(--space-3); }
+  .lead-success p { color: var(--color-text-muted); margin-bottom: var(--space-5); }
+  .lead-success .ref-code {
+    display: inline-block; padding: 8px 14px; border-radius: var(--radius-sm);
+    background: rgba(99,102,241,0.10); border: 1px solid var(--color-border-brand);
+    font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-primary-light);
+  }
+
+  /* What we cover */
+  .what-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+  .what-card { padding: var(--space-7); border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-border); transition: border-color var(--duration-base), background var(--duration-base); }
+  .what-card:hover { border-color: var(--color-border-brand); background: var(--color-surface-elevated); }
+  .what-card .icon { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; margin-bottom: var(--space-4); }
+  .what-card h3 { font-size: var(--fs-h5); margin-bottom: var(--space-3); }
+  .what-card p { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+  @media (max-width: 800px) { .what-grid { grid-template-columns: 1fr; } }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-7); }
+  .step .step-num {
+    display: inline-flex; width: 40px; height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--gradient-brand-soft);
+    border: 1px solid var(--color-border-brand);
+    color: var(--color-primary-light);
+    align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 600; font-size: var(--fs-body);
+    margin-bottom: var(--space-5);
+  }
+  .step h3 { margin-bottom: var(--space-3); }
+  @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
+
+  /* FAQ */
+  .faq { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-3); }
+  details { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-5) var(--space-6); transition: border-color var(--duration-base), background var(--duration-base); }
+  details[open] { border-color: var(--color-border-brand); background: var(--color-surface-elevated); }
+  details summary { cursor: pointer; font-weight: 500; font-size: var(--fs-h5); color: var(--color-text); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after { content:'+'; font-family: var(--font-mono); color: var(--color-text-muted); font-size: 22px; line-height: 1; flex-shrink: 0; transition: transform var(--duration-base); }
+  details[open] summary::after { content:'−'; }
+  details .answer { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border); color: var(--color-text-muted); line-height: var(--lh-relaxed); }
+
+  /* WhatsApp floating button */
+  .wa-float {
+    position: fixed; right: 24px; bottom: 90px; z-index: 40;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25D366; box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+    display: flex; align-items: center; justify-content: center;
+    color: white; transition: transform var(--duration-base) var(--ease-out);
+  }
+  .wa-float:hover { transform: scale(1.08); }
+
+  /* Footer (shared) */
+  footer { border-top: 1px solid var(--color-border); padding: var(--space-10) 0 var(--space-9); position: relative; z-index: 1; }
+  .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: var(--space-9); margin-bottom: var(--space-9); }
+  .footer-col h4 { font-size: var(--fs-caption); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: var(--space-5); }
+  .footer-col ul { display: flex; flex-direction: column; gap: var(--space-3); }
+  .footer-col a { color: var(--color-text-muted); font-size: var(--fs-body-sm); transition: color var(--duration-base); }
+  .footer-col a:hover { color: var(--color-text-strong); }
+  .footer-brand .logo { margin-bottom: var(--space-4); }
+  .footer-brand p { color: var(--color-text-muted); font-size: var(--fs-body-sm); line-height: var(--lh-normal); max-width: 320px; }
+  .footer-bottom { padding-top: var(--space-7); border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4); font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-subtle); letter-spacing: var(--tracking-mono); }
+  @media (max-width: 800px) { .footer-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-7); } .footer-brand { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"></div>
+<div class="bg-grid"></div>
+
+<!-- ─── NAV ───────────────────────────────────────────────── -->
+<div class="nav-wrap">
+  <nav class="top">
+    <a href="/" class="logo">
+      <span class="logo-mark"></span>
+      Tradesly
+    </a>
+    <div class="links">
+      <a href="/#how-it-works">How it works</a>
+      <a href="/#trades">Trades</a>
+      <a href="/for-tradespeople.html">For tradespeople</a>
+    </div>
+    <a href="#get-quotes" class="btn btn-primary sm" data-magnetic>Get free quotes</a>
+  </nav>
+</div>
+
+<!-- ─── BREADCRUMB ──────────────────────────────────────── -->
+<div class="container crumbs">
+  <a href="/">Home</a><span class="sep">/</span><a href="/#trades">Trades</a><span class="sep">/</span><span class="current">Heat pumps</span>
+</div>
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section class="container hero">
+  <div class="hero-grid">
+    <div>
+      <div class="pill" data-appear><span class="pill-dot"></span>Heat pumps · UK-wide coverage</div>
+      <h1 class="h1" data-split="words" style="margin-top:24px">Free heat pump quotes from <span class="text-grad">MCS-certified installers.</span></h1>
+      <p class="subtitle" data-appear data-appear-delay="0.4">Tell us about your property. We match you with up to three vetted UK heat pump installers — all MCS-certified, all able to apply the £7,500 Boiler Upgrade Scheme grant on your behalf.</p>
+
+      <div class="grant-badge" data-appear data-appear-delay="0.5">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M12 2v20M5 9l7-7 7 7"/></svg>
+        <div>
+          <span class="label">BUS Grant available</span>
+          <span class="amount">— £7,500 off your install</span>
+        </div>
+      </div>
+
+      <ul class="hero-bullets" data-appear data-appear-delay="0.6">
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Air source, ground source, and hybrid systems covered</span>
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Quotes include grant calculation, system sizing, and full install</span>
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Replies within 24 hours — by email or WhatsApp, your choice</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Lead form -->
+    <div class="lead-panel" id="get-quotes" data-reveal="fade-left">
+      <div class="lead-panel-head">
+        <div class="pill"><span class="pill-dot"></span>Free · Two minutes</div>
+        <h2>Get up to 3 quotes</h2>
+        <p>Vetted local installers. No phone calls, no spam.</p>
+      </div>
+
+      <form class="lead-form" id="leadForm" data-niche="heat-pumps" novalidate>
+        <div class="field">
+          <label for="postcode">Your postcode <span class="required">*</span></label>
+          <input id="postcode" name="postcode" type="text" placeholder="M20 6FR" required pattern="[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s?\d[A-Za-z]{2}" autocomplete="postal-code">
+          <span class="help">UK postcode — used to match installers covering your area</span>
+        </div>
+
+        <div class="field">
+          <label for="email">Your email <span class="required">*</span></label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label for="problem">Tell us about your property <span class="required">*</span></label>
+          <textarea id="problem" name="problem" placeholder="e.g. 3-bed semi, currently on gas combi, looking for air source heat pump. Roof insulated last year." required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="phone">Phone <span style="color:var(--color-text-subtle)">(optional)</span></label>
+            <input id="phone" name="phone" type="tel" placeholder="07xxx xxx xxx" autocomplete="tel">
+          </div>
+          <div class="field">
+            <label for="whatsapp">WhatsApp <span style="color:var(--color-text-subtle)">(optional)</span></label>
+            <input id="whatsapp" name="whatsapp" type="tel" placeholder="Same as phone, or different">
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" name="gdpr_consent" required>
+          <span>I agree my details can be shared with up to three matched local installers to receive free quotes. <a href="/privacy.html" style="color:var(--color-primary-light); text-decoration:underline">How we handle your data</a>.</span>
+        </label>
+
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary lg" data-magnetic style="width:100%" id="submitBtn">
+            <span class="btn-label">Get my free quotes</span>
+            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <p class="form-microcopy">Free · No phone calls · Reply within 24h</p>
+        </div>
+      </form>
+
+      <div class="lead-success" id="leadSuccess">
+        <div class="success-icon">✓</div>
+        <h3>Quote request received</h3>
+        <p>We're matching you with up to 3 vetted local installers. Expect replies by email within 24 hours.</p>
+        <div class="ref-code" id="refCode">Ref: ld-—</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHAT WE COVER ───────────────────────────────────── -->
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">What we cover</div>
+    <h2 class="h2">Every kind of <span class="text-grad">heat pump install.</span></h2>
+    <p class="body-lg">Whatever your property, our matched installers can scope, size, and quote.</p>
+  </div>
+
+  <div class="what-grid" data-stagger-parent>
+    <div class="what-card" data-stagger-child>
+      <div class="icon" style="background: linear-gradient(135deg, #6366F1, #A855F7)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="9" cy="13" r="2.5"/><circle cx="15" cy="13" r="2.5"/><path d="M3 10h18"/></svg>
+      </div>
+      <h3>Air source heat pumps</h3>
+      <p>The most common choice for UK homes. Fits outside on a small footprint, no excavation needed. Most efficient when paired with a well-insulated property.</p>
+    </div>
+    <div class="what-card" data-stagger-child>
+      <div class="icon" style="background: linear-gradient(135deg, #166534, #22D3EE)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l5-9 4 6 3-4 6 7"/><path d="M3 21h18"/></svg>
+      </div>
+      <h3>Ground source heat pumps</h3>
+      <p>Higher upfront cost, lower running cost long-term. Requires garden space for trenches or boreholes. Best for larger properties or new-builds.</p>
+    </div>
+    <div class="what-card" data-stagger-child>
+      <div class="icon" style="background: linear-gradient(135deg, #F59E0B, #EF4444)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>
+      </div>
+      <h3>Hybrid systems</h3>
+      <p>Heat pump paired with your existing gas or LPG boiler. Switches automatically based on outside temperature. Lower install cost, partial grant eligibility.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ───────────────────────────────────── -->
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">How it works</div>
+    <h2 class="h2">Three steps. <span class="text-grad">Twenty-four hours.</span></h2>
+  </div>
+  <div class="steps" data-stagger-parent>
+    <div class="step" data-stagger-child>
+      <div class="step-num">01</div>
+      <h3 class="h4">Tell us about your property</h3>
+      <p class="body">Postcode, property type, current heating, any insulation done. Two minutes — no phone, no spam.</p>
+    </div>
+    <div class="step" data-stagger-child>
+      <div class="step-num">02</div>
+      <h3 class="h4">We match you</h3>
+      <p class="body">Up to three MCS-certified installers in your postcode. Usually within an hour.</p>
+    </div>
+    <div class="step" data-stagger-child>
+      <div class="step-num">03</div>
+      <h3 class="h4">Compare quotes</h3>
+      <p class="body">Each installer replies with quote, system spec, and grant calculation. You pick the best one. Free, no obligation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ──────────────────────────────────────────────── -->
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">FAQ</div>
+    <h2 class="h2">Heat pump <span class="text-grad">questions, answered.</span></h2>
+  </div>
+
+  <div class="faq" data-stagger-parent>
+    <details data-stagger-child>
+      <summary>How much does a heat pump cost in the UK?</summary>
+      <div class="answer">Air source systems typically run £8,000–£14,000 installed before grant. With the £7,500 Boiler Upgrade Scheme grant, your out-of-pocket can drop to £500–£6,500. Ground source is higher (£18,000–£28,000 before grant) but qualifies for the same grant. Tradesly is free for homeowners — installers pay us a small matching fee per quote request, never you. Your matched installers will give you a precise quote based on your property.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>How does the £7,500 BUS grant work?</summary>
+      <div class="answer">The Boiler Upgrade Scheme is a UK government grant. Your installer applies on your behalf and the grant is deducted directly from your invoice — you don't pay upfront and claim back. Eligibility requires owning the property, having an EPC, and having any loft/cavity insulation recommendations addressed. Our matched installers handle the entire grant process.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>How long does an install take?</summary>
+      <div class="answer">Most air source installs take 2–5 days on-site. Ground source takes longer due to trenching/borehole work — typically 1–3 weeks. From quote acceptance to install date, expect 4–10 weeks depending on installer schedules.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>Will a heat pump work in my old house? Are installers vetted?</summary>
+      <div class="answer">Yes — but the install needs more thought. Older homes often need additional insulation, larger radiators, or in some cases underfloor heating to perform efficiently. A good installer will spec the system to your property's heat-loss profile. Every installer on Tradesly is MCS-certified (a hard regulatory requirement to apply the BUS grant), insured, and held to a quality bar. Installers who let customers down are paused automatically.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ────────────────────────────────────────── -->
+<section class="container section tight">
+  <div style="text-align:center; max-width:680px; margin:0 auto" data-reveal="fade-up">
+    <h2 class="h2" style="margin-bottom:var(--space-5)">Ready for your <span class="text-grad">heat pump quotes?</span></h2>
+    <p class="body-lg" style="margin-bottom:var(--space-7)">Two minutes. Three installers. Twenty-four hours.</p>
+    <a href="#get-quotes" class="btn btn-primary lg" data-magnetic>
+      Get my free quotes
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <span class="logo-mark"></span>
+          Tradesly
+        </a>
+        <p>Connecting UK homeowners with vetted local trades. Free for homeowners, fair for pros.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Trades</h4>
+        <ul>
+          <li><a href="/heat-pumps.html">Heat pumps</a></li>
+          <li><a href="/loft-conversions.html">Loft conversions</a></li>
+          <li><a href="/solar.html">Solar panels</a></li>
+          <li><a href="/driveways.html">Driveways</a></li>
+          <li><a href="/garden-landscaping.html">Garden &amp; landscaping</a></li>
+          <li><a href="/scaffolding.html">Scaffolding</a></li>
+          <li><a href="/cleaning.html">Cleaning</a></li>
+          <li><a href="/drains-plumbing.html">Drains &amp; plumbing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <ul>
+          <li><a href="/#how-it-works">How it works</a></li>
+          <li><a href="/for-tradespeople.html">For tradespeople</a></li>
+          <li><a href="mailto:hello@tradesly.co.uk">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/privacy.html">Privacy</a></li>
+          <li><a href="/terms.html">Terms</a></li>
+          <li><a href="/privacy.html#gdpr">GDPR</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Tradesly · A quote-matching service. Tradespeople listed are independent businesses.</span>
+      <span>Made in the UK 🇬🇧</span>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp floating button (placeholder number, swap before ship) -->
+<a href="https://wa.me/447000000000?text=Hi%2C%20I'd%20like%20a%20heat%20pump%20quote" class="wa-float" aria-label="Chat on WhatsApp" target="_blank" rel="noopener">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/></svg>
+</a>
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Tradesly animation toolkit -->
+<script src="/animations.js"></script>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Lead form submission — uses textContent (no innerHTML) and DOM methods for safety
+  const form = document.getElementById('leadForm');
+  const success = document.getElementById('leadSuccess');
+  const refCode = document.getElementById('refCode');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnLabel = submitBtn.querySelector('.btn-label');
+  const btnIcon = submitBtn.querySelector('.btn-icon');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    btnLabel.textContent = 'Submitting…';
+    if (btnIcon) btnIcon.style.display = 'none';
+
+    const data = {
+      niche_slug: form.dataset.niche,
+      postcode: form.postcode.value.trim().toUpperCase(),
+      email: form.email.value.trim(),
+      problem: form.problem.value.trim(),
+      phone: form.phone.value.trim() || null,
+      whatsapp: form.whatsapp.value.trim() || null,
+      gdpr_consent: form.gdpr_consent.checked,
+      gdpr_consent_at: new Date().toISOString(),
+      page_url: window.location.href,
+    };
+
+    let leadId = `ld-local-${Date.now()}`;
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        const result = await res.json();
+        if (result.lead_id) leadId = result.lead_id;
+      } else {
+        throw new Error('intake-not-ok');
+      }
+    } catch (err) {
+      // v1: lead_intake.py not yet built — log to console so we don't lose data during build phase
+      console.warn('[tradesly] /api/lead unreachable, lead logged locally:', data);
+    }
+
+    refCode.textContent = `Ref: ${leadId}`;
+    form.classList.add('hidden');
+    success.classList.add('shown');
+    success.scrollIntoView({behavior: 'smooth', block: 'center'});
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+# Tradesly Cloudflare Worker config
+# Copy to wrangler.toml and fill in the {{placeholders}} after running:
+#   wrangler kv:namespace create TRADESLY_KV
+#
+# wrangler.toml is gitignored (contains your KV namespace ID); commit only the .example.
+
+name = "tradesly-intake"
+main = "worker.mjs"
+compatibility_date = "2026-05-13"
+
+# Route to attach this Worker to. Replace with your actual zone.
+# Or use a Workers.dev subdomain for testing.
+# routes = [
+#   { pattern = "tradesly.co.uk/api/*", zone_name = "tradesly.co.uk" }
+# ]
+
+[[kv_namespaces]]
+binding = "TRADESLY_KV"
+id = "{{REPLACE_WITH_KV_ID}}"
+# preview_id = "{{REPLACE_WITH_PREVIEW_KV_ID}}"  # optional, for `wrangler dev`
+
+# Secrets (set via `wrangler secret put NAME`):
+#   TG_BOT_TOKEN  — Telegram bot token (e.g. for @AireyAIsitebot)
+#   TG_CHAT_ID    — Telegram chat ID for alerts (e.g. 1522022288 = Kyle's chat)
+
+# Observability — capture console.log + console.error for tail/inspect
+[observability]
+enabled = true

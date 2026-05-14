@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0A1F">
+
+<title>For tradespeople — Get qualified leads, pay only for real ones · Tradesly</title>
+<meta name="description" content="Get vetted UK homeowner leads in your postcodes. Pay per lead, not per month. First 3 leads free. 24-hour dispute window. No long-term contract.">
+<link rel="canonical" href="https://tradesly.co.uk/for-tradespeople">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tradesly.co.uk/for-tradespeople">
+<meta property="og:title" content="For tradespeople — Tradesly">
+<meta property="og:description" content="Get qualified UK homeowner leads. Pay per lead, not per month. First 3 free.">
+<meta property="og:site_name" content="Tradesly">
+<meta property="og:image" content="https://tradesly.co.uk/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/niche.css">
+
+<style>
+  /* Page-specific: pricing table, sample lead panel */
+
+  .sample-lead-panel {
+    background: linear-gradient(180deg, rgba(20,20,43,0.92), rgba(20,20,43,0.74));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-glow);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+  }
+  .panel-head {
+    display: flex; align-items: center; padding: 14px 18px; gap: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .dots { display: flex; gap: 6px; }
+  .dots span { width: 11px; height: 11px; border-radius: 50%; }
+  .dots span:nth-child(1) { background: #FF5F56; }
+  .dots span:nth-child(2) { background: #FFBD2E; }
+  .dots span:nth-child(3) { background: #27C93F; }
+  .panel-title { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-muted); margin-left: auto; letter-spacing: var(--tracking-mono); }
+
+  .lead-email { padding: var(--space-7); }
+  .lead-email-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: var(--space-5); margin-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .lead-email-from { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .lead-email-from strong { color: var(--color-text); display: block; margin-bottom: 2px; }
+  .lead-email-tier {
+    background: linear-gradient(135deg, rgba(99,102,241,0.20), rgba(168,85,247,0.10));
+    border: 1px solid var(--color-border-brand);
+    color: var(--color-primary-light);
+    padding: 6px 14px; border-radius: var(--radius-pill);
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-mono);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .lead-email-tier::before { content:''; width: 6px; height: 6px; background: var(--color-accent); border-radius: 50%; }
+  .lead-email-subject { font-size: var(--fs-h5); font-weight: 600; margin-bottom: var(--space-3); color: var(--color-text); }
+  .lead-email-row { display: flex; gap: var(--space-3); margin-bottom: var(--space-2); align-items: baseline; }
+  .lead-email-row .key { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-subtle); width: 88px; flex-shrink: 0; letter-spacing: var(--tracking-mono); }
+  .lead-email-row .value { font-size: var(--fs-body-sm); color: var(--color-text); }
+  .lead-email-problem {
+    margin-top: var(--space-5); padding: var(--space-5);
+    background: rgba(99,102,241,0.06);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    color: var(--color-text); font-size: var(--fs-body-sm); line-height: var(--lh-relaxed); font-style: italic;
+  }
+  .lead-email-cta {
+    margin-top: var(--space-6); padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3);
+  }
+  .lead-email-price {
+    font-family: var(--font-mono); font-size: var(--fs-body-lg); font-weight: 600;
+    background: var(--gradient-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .lead-email-price-label { font-size: var(--fs-micro); color: var(--color-text-muted); font-family: var(--font-mono); display: block; letter-spacing: var(--tracking-mono); }
+
+  /* Pricing tier table */
+  .tier-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4);
+  }
+  .tier-card {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); padding: var(--space-7);
+    transition: transform var(--duration-base) var(--ease-out), border-color var(--duration-base);
+    position: relative;
+  }
+  .tier-card:hover { transform: translateY(-4px); border-color: var(--color-border-brand); }
+  .tier-card.recommended {
+    border-color: var(--color-border-brand);
+    background: linear-gradient(180deg, rgba(99,102,241,0.10), var(--color-surface));
+  }
+  .tier-card.recommended::before {
+    content:'Most popular'; position: absolute; top: -10px; right: var(--space-5);
+    background: var(--gradient-brand); color: white;
+    padding: 3px 10px; border-radius: var(--radius-pill);
+    font-size: var(--fs-micro); font-weight: 600; letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+  }
+  .tier-name {
+    font-family: var(--font-mono); font-size: var(--fs-caption);
+    color: var(--color-text-muted); letter-spacing: var(--tracking-mono); text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+  .tier-headline { font-size: 22px; font-weight: 600; letter-spacing: var(--tracking-snug); margin-bottom: var(--space-3); }
+  .tier-price {
+    font-family: var(--font-mono); font-size: 26px; font-weight: 600;
+    background: var(--gradient-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: var(--space-2);
+  }
+  .tier-price-detail { font-size: var(--fs-caption); color: var(--color-text-muted); margin-bottom: var(--space-5); }
+  .tier-includes { display: flex; flex-direction: column; gap: var(--space-2); }
+  .tier-includes li { display: flex; gap: var(--space-2); align-items: flex-start; font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .tier-includes svg { color: var(--color-accent); flex-shrink: 0; margin-top: 4px; }
+
+  @media (max-width: 1100px) { .tier-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .tier-grid { grid-template-columns: 1fr; } }
+
+  /* Apply form panel */
+  .apply-panel {
+    background: linear-gradient(180deg, rgba(20,20,43,0.94), rgba(20,20,43,0.82));
+    border: 1px solid var(--color-border-brand);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-glow);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    max-width: 720px; margin: 0 auto;
+  }
+  .apply-form { padding: var(--space-9); display: flex; flex-direction: column; gap: var(--space-5); }
+  .niche-checkbox-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .niche-check {
+    display: flex; align-items: center; gap: var(--space-2);
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-body-sm); color: var(--color-text);
+    cursor: pointer; transition: border-color var(--duration-base), background var(--duration-base);
+  }
+  .niche-check:hover { border-color: var(--color-border-brand); background: rgba(99,102,241,0.04); }
+  .niche-check input { accent-color: var(--color-primary); }
+  .niche-check input:checked ~ * { color: var(--color-primary-light); }
+
+  .tier-checkbox-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  @media (max-width: 600px) {
+    .niche-checkbox-grid { grid-template-columns: 1fr; }
+    .tier-checkbox-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Apply success */
+  .apply-success { display: none; padding: var(--space-9); text-align: center; }
+  .apply-success.shown { display: block; }
+  .apply-form.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"></div>
+<div class="bg-grid"></div>
+
+<div class="nav-wrap"><nav class="top">
+  <a href="/" class="logo"><span class="logo-mark"></span>Tradesly</a>
+  <div class="links"><a href="/#how-it-works">How it works</a><a href="/#trades">Trades</a><a href="/for-tradespeople.html" style="color:var(--color-text-strong)">For tradespeople</a></div>
+  <a href="#apply" class="btn btn-primary sm" data-magnetic>Apply now</a>
+</nav></div>
+
+<section class="container hero">
+  <div class="hero-grid">
+    <div>
+      <div class="pill" data-appear><span class="pill-dot"></span>For UK tradespeople &amp; specialists</div>
+      <h1 class="h1" data-split="words" style="margin-top:24px">Get qualified leads. <span class="text-grad">Pay only for real ones.</span></h1>
+      <p class="subtitle" data-appear data-appear-delay="0.4">We send you homeowners actively asking for quotes in your trade and your postcodes. Pay per lead, not per month. No retainer, no setup fee, no commission on the job. First 3 leads free.</p>
+
+      <ul class="hero-bullets" data-appear data-appear-delay="0.6">
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Pay per lead — £20 to £250 depending on tier</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>24-hour dispute window — fake or duplicate leads refunded automatically</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Set your own postcodes and daily cap. Pause anytime.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Geo-matched only — leads from postcodes you actually cover</span></li>
+      </ul>
+
+      <a href="#apply" class="btn btn-primary lg" data-magnetic style="margin-top: var(--space-4)">
+        Apply to join
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="sample-lead-panel" data-reveal="fade-left">
+      <div class="panel-head">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="panel-title">tradesly · sample lead</div>
+      </div>
+      <div class="lead-email">
+        <div class="lead-email-header">
+          <div class="lead-email-from">
+            <strong>From: Tradesly &lt;leads@tradesly.co.uk&gt;</strong>
+            <span>To: you@yourbusiness.co.uk</span>
+          </div>
+          <div class="lead-email-tier">T3 · Quote-ready</div>
+        </div>
+
+        <div class="lead-email-subject">New T3 lead — M20 6FR — Heat pump</div>
+
+        <div class="lead-email-row"><span class="key">name</span><span class="value">Sarah Jones</span></div>
+        <div class="lead-email-row"><span class="key">postcode</span><span class="value">M20 6FR</span></div>
+        <div class="lead-email-row"><span class="key">phone</span><span class="value">07xxx xxx xxx</span></div>
+        <div class="lead-email-row"><span class="key">whatsapp</span><span class="value">+44 7xxx xxx xxx</span></div>
+        <div class="lead-email-row"><span class="key">email</span><span class="value">sarah@example.com</span></div>
+        <div class="lead-email-row"><span class="key">timeframe</span><span class="value">Within 4 weeks</span></div>
+
+        <div class="lead-email-problem">"Researching air source heat pump for my 3-bed semi. Currently on gas combi, want to switch before winter. Already have an EPC. Would prefer Saturday callback."</div>
+
+        <div class="lead-email-cta">
+          <span><span class="lead-email-price-label">tier price</span><span class="lead-email-price">£150</span></span>
+          <span style="font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-muted); letter-spacing: var(--tracking-mono);">Reply DISPUTE within 24h if not real</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">How it works</div>
+    <h2 class="h2">Three steps. <span class="text-grad">Leads in your inbox.</span></h2>
+    <p class="body-lg">No retainer, no setup fee, no contract. Apply, get matched, get paid back when leads close.</p>
+  </div>
+  <div class="steps" data-stagger-parent>
+    <div class="step" data-stagger-child>
+      <div class="step-num">01</div>
+      <h3 class="h4">Apply &amp; get vetted</h3>
+      <p class="body">Tell us your trade, postcodes, daily cap, and credentials. We verify you within 24 hours — insurance, certifications (Gas Safe, MCS, NICEIC, CISRS as applicable), and quality bar.</p>
+    </div>
+    <div class="step" data-stagger-child>
+      <div class="step-num">02</div>
+      <h3 class="h4">Receive matched leads</h3>
+      <p class="body">Quote-ready homeowners in your postcodes land in your inbox + WhatsApp the moment we match them. We chase the homeowner if they go quiet.</p>
+    </div>
+    <div class="step" data-stagger-child>
+      <div class="step-num">03</div>
+      <h3 class="h4">Quote &amp; pay weekly</h3>
+      <p class="body">You quote, we invoice you weekly via Stripe. Bad lead? Reply DISPUTE within 24 hours and we refund automatically. Pause anytime if you're full.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">Pricing</div>
+    <h2 class="h2">Four tiers. <span class="text-grad">Pay for what you get.</span></h2>
+    <p class="body-lg">Every lead is graded by qualification depth. You pay the tier price — never more, never per-job commission.</p>
+  </div>
+  <div class="tier-grid" data-stagger-parent>
+    <div class="tier-card" data-stagger-child>
+      <div class="tier-name">Tier 1 · Cold</div>
+      <h3 class="tier-headline">Form filled</h3>
+      <div class="tier-price">£20 — £40</div>
+      <div class="tier-price-detail">per lead</div>
+      <ul class="tier-includes">
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Postcode + email + problem description</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Phone or WhatsApp if provided</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>GDPR-consented to be contacted</span></li>
+      </ul>
+    </div>
+
+    <div class="tier-card" data-stagger-child>
+      <div class="tier-name">Tier 2 · Verified</div>
+      <h3 class="tier-headline">Confirmed real</h3>
+      <div class="tier-price">£40 — £80</div>
+      <div class="tier-price-detail">per lead</div>
+      <ul class="tier-includes">
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Everything in Tier 1</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Lead replied to confirm intent</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Phone/email proven reachable</span></li>
+      </ul>
+    </div>
+
+    <div class="tier-card recommended" data-stagger-child>
+      <div class="tier-name">Tier 3 · Quote-ready</div>
+      <h3 class="tier-headline">Wants quote now</h3>
+      <div class="tier-price">£80 — £150</div>
+      <div class="tier-price-detail">per lead</div>
+      <ul class="tier-includes">
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Everything in Tier 2</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Timeframe given (week / month / specific)</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Problem clarified with property details</span></li>
+      </ul>
+    </div>
+
+    <div class="tier-card" data-stagger-child>
+      <div class="tier-name">Tier 4 · Detailed</div>
+      <h3 class="tier-headline">Maximum context</h3>
+      <div class="tier-price">£120 — £250</div>
+      <div class="tier-price-detail">per lead</div>
+      <ul class="tier-includes">
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Everything in Tier 3</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Photos, property type, or specific date</span></li>
+        <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span>Highest close rate, lowest objection</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">Why tradespeople join</div>
+    <h2 class="h2">Built for pros. <span class="text-grad">Not for directories.</span></h2>
+    <p class="body-lg">Tradesly is the opposite of pay-to-list, scrape-and-hope-it-works, and per-job commission models.</p>
+  </div>
+
+  <div class="feature-grid" data-stagger-parent>
+    <div class="feature" data-stagger-child>
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.45 0 4.66.98 6.27 2.57"/></svg>
+      </div>
+      <h3>No retainer, ever</h3>
+      <p class="body">No monthly fee. No setup cost. No annual contract. You pay only when a real lead lands in your inbox.</p>
+    </div>
+    <div class="feature" data-stagger-child>
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
+      </div>
+      <h3>Geo-matched only</h3>
+      <p class="body">Set your postcodes at sign-up — only matching leads from those areas reach you. Daily cap controls volume.</p>
+    </div>
+    <div class="feature" data-stagger-child>
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </div>
+      <h3>24h dispute window</h3>
+      <p class="body">Fake number? Already sorted? Wrong postcode? Reply DISPUTE within 24 hours — auto-refunded. No arguments.</p>
+    </div>
+    <div class="feature" data-stagger-child>
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <h3>First 3 leads free</h3>
+      <p class="body">Try us with zero risk. We send you the first 3 qualifying leads in your area, on us. Pay only after you've seen the quality.</p>
+    </div>
+    <div class="feature" data-stagger-child>
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h3>No commission on the job</h3>
+      <p class="body">You quote, you close, you keep 100% of the job revenue. We take a flat lead fee, never a percentage of what the homeowner pays you.</p>
+    </div>
+    <div class="feature" data-stagger-child>
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+      </div>
+      <h3>Pause anytime</h3>
+      <p class="body">Full this month? Pause your account in one click. No notice period. Resume when you have capacity again.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section" id="apply">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill"><span class="pill-dot"></span>Application · 3 minutes</div>
+    <h2 class="h2">Apply to join <span class="text-grad">Tradesly.</span></h2>
+    <p class="body-lg">We'll verify you within 24 hours and send you 3 free qualifying leads in your area.</p>
+  </div>
+
+  <div class="apply-panel" data-reveal="fade-up">
+    <form class="apply-form" id="applyForm" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="business_name">Business name <span class="required">*</span></label>
+          <input id="business_name" name="business_name" type="text" required autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="contact_name">Your name <span class="required">*</span></label>
+          <input id="contact_name" name="contact_name" type="text" required autocomplete="name">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="email">Email <span class="required">*</span></label>
+          <input id="email" name="email" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="phone">Phone <span class="required">*</span></label>
+          <input id="phone" name="phone" type="tel" required autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Trades you cover <span class="required">*</span> <span style="color:var(--color-text-subtle); font-weight:400">(select all that apply)</span></label>
+        <div class="niche-checkbox-grid">
+          <label class="niche-check"><input type="checkbox" name="niches" value="heat-pumps"><span>Heat pumps</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="loft-conversions"><span>Loft conversions</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="solar"><span>Solar panels</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="driveways"><span>Driveways &amp; paving</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="garden-landscaping"><span>Garden &amp; landscaping</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="scaffolding"><span>Scaffolding</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="cleaning"><span>Cleaning</span></label>
+          <label class="niche-check"><input type="checkbox" name="niches" value="drains-plumbing"><span>Drains &amp; plumbing</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="postcodes">Postcodes you cover <span class="required">*</span></label>
+        <textarea id="postcodes" name="postcodes" placeholder="e.g. M1, M2, M3, M4, M19, M20, M21 — outward codes only, comma separated" required></textarea>
+        <span class="help">Just the outward codes (M20, not M20 6FR). We'll only send leads from postcodes you list.</span>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="daily_cap">Daily lead cap <span class="required">*</span></label>
+          <input id="daily_cap" name="daily_cap" type="number" min="1" max="50" placeholder="3" required>
+          <span class="help">Max leads per day across all your niches</span>
+        </div>
+        <div class="field">
+          <label for="years">Years in business</label>
+          <input id="years" name="years" type="number" min="0" max="80" placeholder="10">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Lead tiers you accept <span class="required">*</span></label>
+        <div class="tier-checkbox-grid">
+          <label class="niche-check"><input type="checkbox" name="tiers" value="T1"><span>T1 · Cold</span></label>
+          <label class="niche-check"><input type="checkbox" name="tiers" value="T2"><span>T2 · Verified</span></label>
+          <label class="niche-check"><input type="checkbox" name="tiers" value="T3" checked><span>T3 · Quote-ready</span></label>
+          <label class="niche-check"><input type="checkbox" name="tiers" value="T4" checked><span>T4 · Detailed</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="credentials">Industry credentials <span style="color:var(--color-text-subtle); font-weight:400">(insurance, Gas Safe, MCS, NICEIC, CISRS, etc.)</span></label>
+        <textarea id="credentials" name="credentials" placeholder="e.g. £5m public liability, Gas Safe registered (123456), MCS-certified for heat pumps."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="website">Website <span style="color:var(--color-text-subtle); font-weight:400">(optional)</span></label>
+          <input id="website" name="website" type="url" placeholder="https://yourbusiness.co.uk">
+        </div>
+        <div class="field">
+          <label for="whatsapp">WhatsApp <span style="color:var(--color-text-subtle); font-weight:400">(optional, for lead delivery)</span></label>
+          <input id="whatsapp" name="whatsapp" type="tel" placeholder="Same as phone, or different">
+        </div>
+      </div>
+
+      <label class="checkbox-row">
+        <input type="checkbox" name="terms_consent" required>
+        <span>I agree to the <a href="/terms.html" style="color:var(--color-primary-light); text-decoration:underline">Tradesly partner terms</a> and confirm all details above are accurate.</span>
+      </label>
+
+      <div class="submit-row">
+        <button type="submit" class="btn btn-primary lg" data-magnetic style="width:100%" id="applyBtn">
+          <span class="btn-label">Apply to join Tradesly</span>
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <p class="form-microcopy">Vetted within 24 hours · First 3 leads free · No setup fee</p>
+      </div>
+    </form>
+
+    <div class="apply-success" id="applySuccess">
+      <div class="success-icon">✓</div>
+      <h3>Application received</h3>
+      <p>Thanks — we'll verify your business within 24 hours and email you to confirm. Then we'll send you up to 3 free qualifying leads in your area.</p>
+      <div class="ref-code" id="applyRef">Ref: byr-—</div>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" data-reveal="fade-up">
+    <div class="pill">FAQ</div>
+    <h2 class="h2">Tradespeople <span class="text-grad">questions, answered.</span></h2>
+  </div>
+  <div class="faq" data-stagger-parent>
+    <details data-stagger-child>
+      <summary>How much do I pay per lead?</summary>
+      <div class="answer">£20 to £250 depending on tier (see pricing above). Most tradespeople accept T3 and T4 leads only — these are quote-ready homeowners with details and timeframe. Average ticket: £80–£150. You set which tiers you accept at sign-up and can change anytime.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>What if a lead is fake or already sorted?</summary>
+      <div class="answer">Reply DISPUTE within 24 hours of delivery with the reason (fake number, already sorted, wrong area, duplicate). We auto-refund. Repeat-offender leads get the source flagged so we don't send similar in future. We don't argue — your time is more valuable than the lead price.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>How fast do leads come?</summary>
+      <div class="answer">As fast as homeowners ask. Some niches (drains, plumbing emergencies) get multiple leads per week per postcode. Others (heat pumps, loft conversions) are 1–4 leads/week per postcode. We grow gradually — you can always increase your daily cap.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>Is there a long-term contract?</summary>
+      <div class="answer">No. Pause your account in one click, no notice period. Cancel anytime. We invoice weekly via Stripe for leads delivered — there's nothing to terminate, just stop accepting leads.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>Do you take commission on the job?</summary>
+      <div class="answer">No. You quote the homeowner, you close the deal, you keep 100% of the job revenue. We take a flat lead fee at the point of delivery — never a percentage of the work you do.</div>
+    </details>
+    <details data-stagger-child>
+      <summary>Are leads exclusive to me?</summary>
+      <div class="answer">By default leads are sent to ONE buyer per enquiry (exclusive). In high-volume niches and postcodes we may offer shared leads (up to 3 buyers, lower price). You opt in to shared leads at sign-up — by default exclusive only.</div>
+    </details>
+  </div>
+</section>
+
+<section class="container section tight">
+  <div style="text-align:center; max-width:680px; margin:0 auto" data-reveal="fade-up">
+    <h2 class="h2" style="margin-bottom:var(--space-5)">Ready to <span class="text-grad">grow your business?</span></h2>
+    <p class="body-lg" style="margin-bottom:var(--space-7)">Apply in 3 minutes. Verified within 24 hours. First 3 leads free.</p>
+    <a href="#apply" class="btn btn-primary lg" data-magnetic>Apply to join Tradesly <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="/" class="logo"><span class="logo-mark"></span>Tradesly</a><p>Connecting UK homeowners with vetted local trades. Free for homeowners, fair for pros.</p></div>
+      <div class="footer-col"><h4>Trades</h4><ul>
+        <li><a href="/heat-pumps.html">Heat pumps</a></li>
+        <li><a href="/loft-conversions.html">Loft conversions</a></li>
+        <li><a href="/solar.html">Solar panels</a></li>
+        <li><a href="/driveways.html">Driveways</a></li>
+        <li><a href="/garden-landscaping.html">Garden &amp; landscaping</a></li>
+        <li><a href="/scaffolding.html">Scaffolding</a></li>
+        <li><a href="/cleaning.html">Cleaning</a></li>
+        <li><a href="/drains-plumbing.html">Drains &amp; plumbing</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>About</h4><ul>
+        <li><a href="/#how-it-works">How it works</a></li>
+        <li><a href="/for-tradespeople.html">For tradespeople</a></li>
+        <li><a href="mailto:hello@tradesly.co.uk">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+        <li><a href="/privacy.html#gdpr">GDPR</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Tradesly · A quote-matching service. Tradespeople listed are independent businesses.</span>
+      <span>Made in the UK 🇬🇧</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="/animations.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const form = document.getElementById('applyForm');
+  const success = document.getElementById('applySuccess');
+  const ref = document.getElementById('applyRef');
+  const submitBtn = document.getElementById('applyBtn');
+  const btnLabel = submitBtn.querySelector('.btn-label');
+  const btnIcon = submitBtn.querySelector('.btn-icon');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    btnLabel.textContent = 'Submitting…';
+    if (btnIcon) btnIcon.style.display = 'none';
+
+    const niches = Array.from(form.querySelectorAll('input[name=niches]:checked')).map(cb => cb.value);
+    const tiers = Array.from(form.querySelectorAll('input[name=tiers]:checked')).map(cb => cb.value);
+
+    if (niches.length === 0) {
+      alert('Please select at least one trade you cover.');
+      submitBtn.disabled = false;
+      btnLabel.textContent = 'Apply to join Tradesly';
+      if (btnIcon) btnIcon.style.display = '';
+      return;
+    }
+    if (tiers.length === 0) {
+      alert('Please select at least one lead tier you accept.');
+      submitBtn.disabled = false;
+      btnLabel.textContent = 'Apply to join Tradesly';
+      if (btnIcon) btnIcon.style.display = '';
+      return;
+    }
+
+    const data = {
+      business_name: form.business_name.value.trim(),
+      contact_name: form.contact_name.value.trim(),
+      email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
+      whatsapp: form.whatsapp.value.trim() || null,
+      website: form.website.value.trim() || null,
+      niches,
+      postcodes: form.postcodes.value.trim().toUpperCase().split(/[,\s]+/).filter(Boolean),
+      daily_cap: parseInt(form.daily_cap.value, 10),
+      years: form.years.value ? parseInt(form.years.value, 10) : null,
+      tiers,
+      credentials: form.credentials.value.trim() || null,
+      terms_consent: form.terms_consent.checked,
+      submitted_at: new Date().toISOString(),
+    };
+
+    let buyerId = `byr-local-${Date.now()}`;
+    try {
+      const res = await fetch('/api/buyer-apply', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        const result = await res.json();
+        if (result.buyer_id) buyerId = result.buyer_id;
+      } else {
+        throw new Error('apply-not-ok');
+      }
+    } catch (err) {
+      console.warn('[tradesly] /api/buyer-apply unreachable, application logged locally:', data);
+    }
+
+    ref.textContent = `Ref: ${buyerId}`;
+    form.classList.add('hidden');
+    success.classList.add('shown');
+    success.scrollIntoView({behavior: 'smooth', block: 'center'});
+  });
+</script>
+</body>
+</html>

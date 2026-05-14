@@ -1,0 +1,21 @@
+# Local-only files — not committed
+node_modules/
+wrangler.toml          # contains KV namespace id; commit only the .example
+.dev.vars              # local wrangler env
+
+# Screenshots from local dev iterations
+temporary screenshots/
+temporary_screenshots/
+
+# Macros/build/cache
+.DS_Store
+*.log
+*.tmp
+.wrangler/
+
+# Env / secrets — should never be committed
+.env
+.env.local
+.env.*.local
+*.pem
+*.key

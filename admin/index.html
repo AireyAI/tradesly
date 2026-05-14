@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0A0A1F">
+<meta name="robots" content="noindex, nofollow">
+
+<title>Tradesly Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens.css">
+
+<style>
+  body { padding-bottom: var(--space-12); }
+
+  .admin-header {
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-6) 0;
+    backdrop-filter: blur(20px) saturate(140%);
+    background: rgba(10,10,31,0.65);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .admin-header-row {
+    max-width: var(--container-max); margin: 0 auto;
+    padding: 0 var(--space-9);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .admin-brand { display: flex; align-items: center; gap: var(--space-3); }
+  .admin-brand .logo-mark {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--gradient-brand); box-shadow: 0 6px 20px rgba(99,102,241,0.45);
+    display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;
+  }
+  .admin-brand .logo-mark::before { content: '⌬'; }
+  .admin-brand h1 { font-size: 22px; font-weight: 600; letter-spacing: var(--tracking-snug); }
+  .admin-brand .badge-admin {
+    font-family: var(--font-mono); font-size: var(--fs-caption);
+    background: rgba(245,158,11,0.14); border: 1px solid rgba(245,158,11,0.30);
+    color: #FBBF24; padding: 4px 10px; border-radius: var(--radius-pill);
+    letter-spacing: var(--tracking-mono);
+  }
+  .admin-meta { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-muted); letter-spacing: var(--tracking-mono); }
+  .admin-meta button {
+    margin-left: var(--space-4); padding: 6px 12px;
+    background: rgba(99,102,241,0.10); border: 1px solid var(--color-border-brand);
+    color: var(--color-primary-light); border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-size: var(--fs-caption); cursor: pointer;
+    transition: background var(--duration-base);
+  }
+  .admin-meta button:hover { background: rgba(99,102,241,0.18); }
+
+  .stats-grid {
+    max-width: var(--container-max); margin: var(--space-9) auto 0;
+    padding: 0 var(--space-9);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-5);
+  }
+  .stat-card {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); padding: var(--space-6);
+    transition: border-color var(--duration-base);
+  }
+  .stat-card:hover { border-color: var(--color-border-brand); }
+  .stat-label { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-3); }
+  .stat-value { font-size: 36px; font-weight: 600; letter-spacing: var(--tracking-tight); line-height: 1;
+    background: var(--gradient-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-sub { font-size: var(--fs-caption); color: var(--color-text-subtle); margin-top: var(--space-2); font-family: var(--font-mono); letter-spacing: var(--tracking-mono); }
+
+  @media (max-width: 800px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 0 var(--space-6); }
+  }
+
+  section.panel {
+    max-width: var(--container-max); margin: var(--space-10) auto 0;
+    padding: 0 var(--space-9);
+  }
+  .panel-title {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: var(--space-5);
+  }
+  .panel-title h2 {
+    font-size: var(--fs-h3); font-weight: 600; letter-spacing: var(--tracking-snug);
+  }
+  .panel-title .pill {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: 4px 12px; border-radius: var(--radius-pill);
+    font-family: var(--font-mono); font-size: var(--fs-caption);
+    background: rgba(99,102,241,0.10); border: 1px solid var(--color-border-brand);
+    color: var(--color-primary-light); letter-spacing: var(--tracking-mono);
+  }
+
+  .table-wrap {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-body-sm); }
+  thead th {
+    text-align: left; padding: var(--space-4) var(--space-5);
+    font-family: var(--font-mono); font-size: var(--fs-caption);
+    color: var(--color-text-muted); letter-spacing: var(--tracking-mono);
+    text-transform: uppercase; border-bottom: 1px solid var(--color-border);
+    background: rgba(255,255,255,0.02);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--color-border);
+    color: var(--color-text); vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(99,102,241,0.04); }
+  td.mono { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-text-muted); letter-spacing: var(--tracking-mono); }
+  td.problem-snippet { max-width: 360px; color: var(--color-text-muted); }
+
+  .niche-tag {
+    display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill);
+    background: var(--gradient-brand-soft); border: 1px solid var(--color-border-brand);
+    color: var(--color-primary-light);
+    font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: var(--tracking-mono);
+  }
+  .tier-tag {
+    display: inline-block; padding: 2px 8px; border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: var(--tracking-mono);
+  }
+  .tier-tag.t1 { background: rgba(255,255,255,0.06); color: var(--color-text-muted); }
+  .tier-tag.t2 { background: rgba(34,211,238,0.12); color: var(--color-accent); }
+  .tier-tag.t3 { background: rgba(168,85,247,0.18); color: var(--color-violet); }
+  .tier-tag.t4 { background: rgba(99,102,241,0.20); color: var(--color-primary-light); }
+  .empty {
+    padding: var(--space-10); text-align: center; color: var(--color-text-muted);
+    font-family: var(--font-mono); font-size: var(--fs-body-sm); letter-spacing: var(--tracking-mono);
+  }
+  .empty code {
+    background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: var(--radius-sm);
+    color: var(--color-primary-light);
+  }
+
+  .conf {
+    display: inline-block; padding: 2px 8px; border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: var(--tracking-mono);
+  }
+  .conf.high { background: rgba(34,197,94,0.14); color: var(--color-success); }
+  .conf.med  { background: rgba(245,158,11,0.14); color: var(--color-warning); }
+  .conf.low  { background: rgba(255,255,255,0.06); color: var(--color-text-muted); }
+
+  .signal-row a { color: var(--color-primary-light); text-decoration: none; }
+  .signal-row a:hover { text-decoration: underline; }
+
+  .niche-breakdown {
+    display: flex; flex-wrap: wrap; gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+  .niche-breakdown .item {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: var(--radius-pill);
+    background: rgba(99,102,241,0.06); border: 1px solid var(--color-border);
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-mono);
+    color: var(--color-text-muted);
+  }
+  .niche-breakdown .item strong { color: var(--color-text); }
+
+  .loading {
+    padding: var(--space-9); text-align: center; color: var(--color-text-muted);
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-mono);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"></div>
+<div class="bg-grid"></div>
+
+<header class="admin-header">
+  <div class="admin-header-row">
+    <div class="admin-brand">
+      <span class="logo-mark"></span>
+      <h1>Tradesly</h1>
+      <span class="badge-admin">ADMIN</span>
+    </div>
+    <div class="admin-meta">
+      <span id="last-updated">Loading...</span>
+      <button id="refresh-btn">↻ Refresh</button>
+    </div>
+  </div>
+</header>
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-label">Leads (today)</div><div class="stat-value" id="stat-leads-today">—</div><div class="stat-sub"><span id="stat-leads-week">—</span> this week</div></div>
+  <div class="stat-card"><div class="stat-label">Buyers active</div><div class="stat-value" id="stat-buyers-active">—</div><div class="stat-sub"><span id="stat-buyers">—</span> pending review</div></div>
+  <div class="stat-card"><div class="stat-label">Deliveries (today)</div><div class="stat-value" id="stat-deliveries-today">—</div><div class="stat-sub"><span id="stat-deliveries-week">—</span> this week · <span id="stat-deliveries-failed">0</span> failed</div></div>
+  <div class="stat-card"><div class="stat-label">Revenue (week)</div><div class="stat-value" id="stat-revenue-week">£—</div><div class="stat-sub">£<span id="stat-revenue-drafts">—</span> in open drafts</div></div>
+  <div class="stat-card"><div class="stat-label">Signals today</div><div class="stat-value" id="stat-signals">—</div><div class="stat-sub">Reddit + council planning</div></div>
+  <div class="stat-card"><div class="stat-label">Pending proposals</div><div class="stat-value" id="stat-proposals">—</div><div class="stat-sub"><span id="stat-pitches">—</span> pitches · <span id="stat-invoice-proposals">0</span> invoices</div></div>
+</div>
+
+<section class="panel" id="lead-status-section" style="display:none">
+  <div class="panel-title"><h2>Lead pipeline state</h2></div>
+  <div class="niche-breakdown" id="lead-status-breakdown"></div>
+</section>
+
+<section class="panel" id="niche-breakdown-section" style="display:none">
+  <div class="panel-title"><h2>Today's signals by niche</h2></div>
+  <div class="niche-breakdown" id="niche-breakdown"></div>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Recent leads</h2>
+    <span class="pill" id="leads-count">—</span>
+  </div>
+  <div class="table-wrap" id="leads-table"><div class="loading">Loading leads...</div></div>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Pending buyer applications</h2>
+    <span class="pill" id="buyers-count">—</span>
+  </div>
+  <div class="table-wrap" id="buyers-table"><div class="loading">Loading buyer applications...</div></div>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Active buyers</h2>
+    <span class="pill" id="buyers-active-count">—</span>
+  </div>
+  <div class="table-wrap" id="buyers-active-table"><div class="loading">Loading active buyers...</div></div>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Recent deliveries</h2>
+    <span class="pill" id="deliveries-count">—</span>
+  </div>
+  <div class="table-wrap" id="deliveries-table"><div class="loading">Loading deliveries...</div></div>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Invoices</h2>
+    <span class="pill" id="invoices-count">—</span>
+  </div>
+  <div class="table-wrap" id="invoices-table"><div class="loading">Loading invoices...</div></div>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Today's intent signals</h2>
+    <span class="pill" id="signals-count">—</span>
+  </div>
+  <div class="table-wrap" id="signals-table"><div class="loading">Loading signals...</div></div>
+</section>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>

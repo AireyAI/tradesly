@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tradesly — Direction B: Modern Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #6366F1;          /* indigo */
+    --color-primary-dark: #4338CA;
+    --color-primary-light: #C7D2FE;
+    --color-accent: #22D3EE;            /* cyan accent */
+    --color-violet: #A855F7;
+    --color-bg: #0A0A1F;                /* deep midnight */
+    --color-surface: #14142B;
+    --color-surface-elevated: #1E1E3F;
+    --color-text: #F5F5FF;
+    --color-text-muted: #9A9AC0;
+    --color-border: rgba(255,255,255,0.08);
+
+    --shadow-glow: 0 20px 60px rgba(99,102,241,0.35), 0 0 80px rgba(168,85,247,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--color-bg); color: var(--color-text);
+    font-family: 'Geist', -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Layered background — radial gradients + grid */
+  body::before {
+    content:''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(99,102,241,0.25), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 85% 25%, rgba(168,85,247,0.20), transparent 70%),
+      radial-gradient(ellipse 70% 50% at 50% 90%, rgba(34,211,238,0.10), transparent 70%);
+  }
+  body::after {
+    content:''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
+  }
+
+  /* Top nav */
+  nav {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px; max-width: 1280px; margin: 0 auto;
+  }
+  .logo {
+    font-weight: 600; font-size: 22px; color: var(--color-text); letter-spacing: -0.03em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-violet));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+  }
+  .logo-mark::before { content:'⌬'; color: white; font-weight: 700; }
+  nav .links { display: flex; gap: 32px; font-size: 14px; color: var(--color-text-muted); font-weight: 500; }
+  nav .links a { color: inherit; text-decoration: none; transition: color 200ms; }
+  nav .links a:hover { color: var(--color-text); }
+  nav .cta-mini {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-violet));
+    color: white; padding: 10px 20px;
+    border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 14px;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+    transition: transform 200ms, box-shadow 200ms;
+  }
+  nav .cta-mini:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.5); }
+
+  /* Hero */
+  .hero {
+    position: relative; z-index: 1;
+    max-width: 1280px; margin: 0 auto;
+    padding: 100px 48px 140px;
+    display: grid; grid-template-columns: 1fr 0.85fr; gap: 60px; align-items: center;
+  }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: var(--color-primary-light);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
+    margin-bottom: 28px;
+    backdrop-filter: blur(8px);
+  }
+  .pill .dot {
+    width: 6px; height: 6px; background: var(--color-accent); border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(34,211,238,0.2); animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(34,211,238,0.2); } 50% { box-shadow: 0 0 0 7px rgba(34,211,238,0.05); } }
+
+  h1 {
+    font-weight: 600;
+    font-size: 84px; line-height: 0.96; letter-spacing: -0.045em;
+    color: var(--color-text);
+    margin-bottom: 28px;
+  }
+  h1 .grad {
+    background: linear-gradient(135deg, #C7D2FE 0%, #6366F1 40%, #A855F7 70%, #22D3EE 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    font-size: 19px; line-height: 1.55; color: var(--color-text-muted);
+    max-width: 480px; margin-bottom: 40px;
+  }
+
+  /* CTA */
+  .cta-row { display: flex; gap: 12px; align-items: center; margin-bottom: 48px; }
+  .cta-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-violet));
+    color: white; padding: 16px 28px; border-radius: 12px;
+    font-weight: 500; font-size: 16px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 10px;
+    box-shadow: 0 12px 32px rgba(99,102,241,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    transition: transform 200ms, box-shadow 200ms;
+    position: relative;
+  }
+  .cta-primary::after {
+    content:''; position: absolute; inset: 0; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent 50%);
+    pointer-events: none;
+  }
+  .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 48px rgba(99,102,241,0.6); }
+  .cta-primary svg { transition: transform 200ms; position: relative; }
+  .cta-primary:hover svg { transform: translateX(2px); }
+  .cta-secondary {
+    color: var(--color-text); padding: 16px 24px;
+    font-weight: 500; font-size: 16px; text-decoration: none;
+    border: 1px solid var(--color-border); border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .cta-secondary:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.16); }
+
+  /* Trust row */
+  .trust-row {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    font-size: 13px; color: var(--color-text-muted); font-family: 'Geist Mono', monospace;
+  }
+  .trust-row .item { display: flex; align-items: center; gap: 8px; letter-spacing: -0.01em; }
+  .trust-row svg { color: var(--color-accent); }
+
+  /* Right side — terminal-like quote display */
+  .panel {
+    position: relative;
+    background: linear-gradient(180deg, rgba(20,20,43,0.9), rgba(20,20,43,0.7));
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 6px;
+    box-shadow: var(--shadow-glow);
+    backdrop-filter: blur(20px);
+  }
+  .panel-head {
+    display: flex; align-items: center; padding: 12px 16px; gap: 10px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .dots { display: flex; gap: 6px; }
+  .dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .dots span:nth-child(1) { background: #FF5F56; }
+  .dots span:nth-child(2) { background: #FFBD2E; }
+  .dots span:nth-child(3) { background: #27C93F; }
+  .panel-title { font-size: 12px; color: var(--color-text-muted); font-family: 'Geist Mono', monospace; margin-left: auto; }
+
+  .panel-body { padding: 24px; }
+  .quote-line {
+    display: flex; gap: 14px; padding: 16px;
+    border-radius: 12px; margin-bottom: 8px;
+    transition: background 200ms;
+    align-items: flex-start;
+  }
+  .quote-line:hover { background: rgba(99,102,241,0.06); }
+  .quote-line.match {
+    background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(168,85,247,0.06));
+    border: 1px solid rgba(99,102,241,0.2);
+  }
+
+  .qline-icon {
+    width: 38px; height: 38px; flex-shrink: 0;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .qline-icon.heat { background: linear-gradient(135deg, #6366F1, #A855F7); }
+  .qline-icon.solar { background: linear-gradient(135deg, #F59E0B, #EF4444); }
+  .qline-icon.loft { background: linear-gradient(135deg, #22D3EE, #6366F1); }
+  .qline-icon.scaff { background: linear-gradient(135deg, #166534, #22D3EE); }
+
+  .qline-content { flex: 1; }
+  .qline-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .qline-trade { font-weight: 600; font-size: 14px; color: var(--color-text); }
+  .qline-time { font-size: 11px; color: var(--color-text-muted); font-family: 'Geist Mono', monospace; }
+  .qline-meta { font-size: 13px; color: var(--color-text-muted); }
+  .qline-price {
+    margin-top: 6px; font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: var(--color-accent);
+  }
+
+  .panel-footer {
+    border-top: 1px solid var(--color-border);
+    padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--color-text-muted);
+  }
+  .live-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: #22D3EE; border-radius: 50%;
+    box-shadow: 0 0 12px #22D3EE;
+    animation: pulse 1.5s infinite;
+    margin-right: 8px;
+  }
+
+  /* Design meta */
+  .design-meta {
+    max-width: 1280px; margin: 0 auto; padding: 60px 48px 80px;
+    border-top: 1px solid var(--color-border);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    position: relative; z-index: 1;
+  }
+  .design-meta h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-text-muted); margin-bottom: 20px; font-family: 'Geist Mono', monospace; }
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch { width: 56px; height: 80px; border-radius: 12px; display: flex; align-items: end; justify-content: center; padding: 8px; font-size: 9px; font-family: monospace; color: rgba(255,255,255,0.7); border: 1px solid var(--color-border); }
+  .type-sample .display { font-size: 38px; font-weight: 600; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 12px; }
+  .type-sample .display .grad { background: linear-gradient(135deg, #6366F1, #A855F7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .type-sample .body { font-size: 15px; color: var(--color-text-muted); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 60px 24px 80px; gap: 48px; }
+    h1 { font-size: 52px; }
+    nav { padding: 20px 24px; }
+    nav .links { display: none; }
+    .design-meta { grid-template-columns: 1fr; padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="logo-mark"></span>
+    Tradesly
+  </div>
+  <div class="links">
+    <a href="#">How it works</a>
+    <a href="#">For tradespeople</a>
+    <a href="#">Trades</a>
+  </div>
+  <a href="#" class="cta-mini">Get free quotes</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="pill"><span class="dot"></span>Live · 47 quotes matched today</div>
+    <h1>Free quotes.<br>Vetted trades.<br><span class="grad">Sorted in 24h.</span></h1>
+    <p class="subtitle">Tell us what you need. Our matching engine finds up to three vetted local pros — and they reply, fast. No fees, no obligation, no chasing.</p>
+    <div class="cta-row">
+      <a href="#" class="cta-primary">Get free quotes
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="cta-secondary">See how it works</a>
+    </div>
+    <div class="trust-row">
+      <div class="item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>GDPR-compliant</span>
+      </div>
+      <div class="item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Free for homeowners</span>
+      </div>
+      <div class="item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>UK-only</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="panel-title">tradesly · matches.live</div>
+    </div>
+    <div class="panel-body">
+      <div class="quote-line match">
+        <div class="qline-icon heat">⚡</div>
+        <div class="qline-content">
+          <div class="qline-top">
+            <div class="qline-trade">Heat pump · M20</div>
+            <div class="qline-time">2m ago</div>
+          </div>
+          <div class="qline-meta">3 MCS-certified installers matched, BUS grant applied</div>
+          <div class="qline-price">est. £8,400 — £11,200 after grant</div>
+        </div>
+      </div>
+      <div class="quote-line">
+        <div class="qline-icon loft">▣</div>
+        <div class="qline-content">
+          <div class="qline-top">
+            <div class="qline-trade">Loft conversion · M19</div>
+            <div class="qline-time">14m ago</div>
+          </div>
+          <div class="qline-meta">2 specialists matched, planning + building regs included</div>
+          <div class="qline-price">est. £38,000 — £52,000</div>
+        </div>
+      </div>
+      <div class="quote-line">
+        <div class="qline-icon solar">☀</div>
+        <div class="qline-content">
+          <div class="qline-top">
+            <div class="qline-trade">Solar PV + battery · M21</div>
+            <div class="qline-time">31m ago</div>
+          </div>
+          <div class="qline-meta">3 installers matched, 4.2kW system + 5kWh battery</div>
+          <div class="qline-price">est. £9,800 — £12,400</div>
+        </div>
+      </div>
+      <div class="quote-line">
+        <div class="qline-icon scaff">▤</div>
+        <div class="qline-content">
+          <div class="qline-top">
+            <div class="qline-trade">Scaffolding hire · M14</div>
+            <div class="qline-time">46m ago</div>
+          </div>
+          <div class="qline-meta">3-storey rear, 2-week erect, residential</div>
+          <div class="qline-price">est. £680 — £950</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <span><span class="live-dot"></span>Matching engine · live</span>
+      <span>247 active jobs</span>
+    </div>
+  </div>
+</section>
+
+<section class="design-meta">
+  <div>
+    <h3>Palette — Modern Premium</h3>
+    <div class="swatches">
+      <div class="swatch" style="background:#6366F1;color:white">#6366F1</div>
+      <div class="swatch" style="background:#4338CA;color:white">#4338CA</div>
+      <div class="swatch" style="background:#A855F7;color:white">#A855F7</div>
+      <div class="swatch" style="background:#22D3EE;color:#003">#22D3EE</div>
+      <div class="swatch" style="background:#0A0A1F;color:white;border-color:rgba(255,255,255,0.2)">#0A0A1F</div>
+      <div class="swatch" style="background:#14142B;color:white;border-color:rgba(255,255,255,0.2)">#14142B</div>
+      <div class="swatch" style="background:#F5F5FF;color:#003">#F5F5FF</div>
+    </div>
+  </div>
+  <div>
+    <h3>Type — Geist (display + UI) + Geist Mono (data)</h3>
+    <div class="type-sample">
+      <div class="display">Trades, but <span class="grad">faster</span>.</div>
+      <div class="body">Geist (the Vercel font) brings precision, neutrality, and tight tracking — modern, technical, premium. Geist Mono in data displays signals "engineered, not amateur." Reads like a fintech product, not a builder's notice board.</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
