@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0A1F">
+
+<title>Welcome to Tradesly — your partner setup starts here</title>
+<meta name="description" content="You're invited to Tradesly. First 3 leads free, pay per qualified lead, no retainer. Reply to your invite email and we'll get you set up in under 24 hours.">
+<link rel="canonical" href="https://tradesly.co.uk/welcome">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tradesly.co.uk/welcome">
+<meta property="og:title" content="Welcome to Tradesly">
+<meta property="og:description" content="First 3 leads free. Pay per qualified lead. No retainer.">
+<meta property="og:site_name" content="Tradesly">
+<meta property="og:image" content="https://tradesly.co.uk/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- robots: keep this page out of the index — it's a private invite landing -->
+<meta name="robots" content="noindex,follow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/niche.css">
+
+<style>
+  /* Page-specific: cinematic video hero */
+
+  /* Reset hero height + remove default spacing so the video can fill the viewport */
+  .welcome-hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  /* Full-bleed video background sits BEHIND everything */
+  .welcome-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    opacity: 0.55;
+    filter: saturate(0.85) brightness(0.7);
+    pointer-events: none;
+  }
+
+  /* Gradient overlay for legibility — dark from bottom to mid, fade at top */
+  .welcome-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(10,10,31,0.45), rgba(10,10,31,0.85) 70%),
+      linear-gradient(180deg, rgba(10,10,31,0.6), rgba(10,10,31,0.95));
+    z-index: 1;
+  }
+
+  /* SVG noise grain for premium feel */
+  .welcome-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.4 0 0 0 0 0.6 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .welcome-content {
+    position: relative;
+    z-index: 3;
+    max-width: 720px;
+    text-align: center;
+  }
+
+  .welcome-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono, var(--font-body));
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+    padding: 6px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface-glass);
+    backdrop-filter: blur(12px);
+  }
+  .welcome-eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 8px var(--color-success);
+  }
+
+  .welcome-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--color-text-strong);
+    margin: 0 0 var(--space-4) 0;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.6);
+  }
+  .welcome-title .accent {
+    background: linear-gradient(90deg, var(--color-primary-light), var(--color-violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .welcome-sub {
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0 auto var(--space-7) auto;
+    max-width: 560px;
+  }
+
+  /* Three benefit pills */
+  .welcome-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-7);
+  }
+  .welcome-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(12px);
+    font-size: 14px;
+    color: var(--color-text);
+  }
+  .welcome-pill svg {
+    width: 16px; height: 16px;
+    color: var(--color-primary-light);
+    flex-shrink: 0;
+  }
+
+  /* CTA row */
+  .welcome-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .welcome-cta-row .btn {
+    min-width: 200px;
+  }
+
+  /* What-happens-next strip below the hero */
+  .next-steps {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-7) var(--space-4);
+    background:
+      linear-gradient(180deg, rgba(10,10,31,0.92), rgba(10,10,31,1));
+  }
+  .next-steps-grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+  @media (max-width: 720px) {
+    .next-steps-grid { grid-template-columns: 1fr; }
+  }
+  .step-card {
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-glass);
+    backdrop-filter: blur(12px);
+  }
+  .step-num {
+    display: inline-flex;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-violet));
+    color: white;
+    align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    margin-bottom: var(--space-3);
+  }
+  .step-card h3 {
+    font-size: 1rem;
+    color: var(--color-text-strong);
+    margin: 0 0 6px 0;
+    font-weight: 600;
+  }
+  .step-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .next-steps h2 {
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    letter-spacing: -0.02em;
+    color: var(--color-text-strong);
+    margin: 0 0 var(--space-6) 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"></div>
+<div class="bg-grid"></div>
+
+<div class="nav-wrap"><nav class="top">
+  <a href="/" class="logo"><span class="logo-mark"></span>Tradesly</a>
+  <div class="links">
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#trades">Trades</a>
+    <a href="/for-tradespeople.html">For tradespeople</a>
+  </div>
+  <a href="/for-tradespeople.html#apply" class="btn btn-primary sm" data-magnetic>Apply now</a>
+</nav></div>
+
+<section class="welcome-hero">
+
+  <!--
+    Higgsfield-generated video. Auto-plays muted on load (browsers allow muted autoplay).
+    object-fit:cover keeps it full-bleed across breakpoints.
+    The URL is replaced post-render by the deploy script.
+  -->
+  <video class="welcome-video"
+         autoplay muted loop playsinline preload="auto"
+         poster="https://placehold.co/1920x1080/0A0A1F/0A0A1F.png"
+         src="/media/welcome-hero.mp4"
+         aria-hidden="true"></video>
+
+  <div class="welcome-overlay"></div>
+  <div class="welcome-grain"></div>
+
+  <div class="welcome-content">
+
+    <div class="welcome-eyebrow" data-appear>Invite verified · setup in under 24h</div>
+
+    <h1 class="welcome-title" data-split="words">
+      Welcome to <span class="accent">Tradesly</span>.
+    </h1>
+
+    <p class="welcome-sub" data-appear data-appear-delay="0.2">
+      You've been invited to be one of the first vetted partners on Tradesly.
+      We send you qualified UK homeowner enquiries in your postcodes — you only
+      pay for the ones that turn into real conversations.
+    </p>
+
+    <div class="welcome-pills" data-stagger-parent>
+      <span class="welcome-pill" data-stagger-child>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+        First 3 leads free
+      </span>
+      <span class="welcome-pill" data-stagger-child>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+        No retainer, no contract
+      </span>
+      <span class="welcome-pill" data-stagger-child>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+        24h dispute window
+      </span>
+    </div>
+
+    <div class="welcome-cta-row">
+      <a href="/for-tradespeople.html#apply" class="btn btn-primary lg" data-magnetic>Apply in 3 minutes</a>
+      <a href="mailto:apcapital.ai@gmail.com?subject=Tradesly%20%E2%80%94%20I%E2%80%99m%20in"
+         class="btn btn-secondary lg" data-magnetic>Reply by email instead</a>
+    </div>
+  </div>
+</section>
+
+<section class="next-steps">
+  <h2 data-reveal="fade-up">What happens next</h2>
+  <div class="next-steps-grid" data-stagger-parent>
+    <div class="step-card" data-stagger-child>
+      <div class="step-num">1</div>
+      <h3>You tell us 3 things</h3>
+      <p>Your service postcodes, daily lead cap, and which tiers (T1–T4) you accept.
+         3 minutes via the form, or just reply to your invite email — either works.</p>
+    </div>
+    <div class="step-card" data-stagger-child>
+      <div class="step-num">2</div>
+      <h3>We verify within 24h</h3>
+      <p>Quick check on your credentials (insurance, certifications), then your
+         account goes live. We confirm by email.</p>
+    </div>
+    <div class="step-card" data-stagger-child>
+      <div class="step-num">3</div>
+      <h3>Leads land in your inbox</h3>
+      <p>The next qualifying homeowner enquiry in your area is on us — first 3 free.
+         You quote them direct. We invoice you Friday for everything after.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GSAP + ScrollTrigger + AireyAI animations toolkit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="/animations.js"></script>
+
+</body>
+</html>
