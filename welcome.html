@@ -51,18 +51,20 @@
     object-fit: cover;
     object-position: center;
     z-index: 0;
-    opacity: 0.55;
-    filter: saturate(0.85) brightness(0.7);
+    opacity: 1;
+    filter: saturate(1.05) contrast(1.05);
     pointer-events: none;
   }
 
-  /* Gradient overlay for legibility — dark from bottom to mid, fade at top */
+  /* Gradient overlay for legibility — feathered edges only, video shows through center */
   .welcome-overlay {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at center, rgba(10,10,31,0.45), rgba(10,10,31,0.85) 70%),
-      linear-gradient(180deg, rgba(10,10,31,0.6), rgba(10,10,31,0.95));
+      /* Subtle vignette so edges feel framed but center stays bright */
+      radial-gradient(ellipse at center, rgba(10,10,31,0) 35%, rgba(10,10,31,0.35) 75%, rgba(10,10,31,0.7) 100%),
+      /* Slight bottom-to-top darken so the title pops */
+      linear-gradient(180deg, rgba(10,10,31,0.0) 0%, rgba(10,10,31,0.1) 40%, rgba(10,10,31,0.55) 100%);
     z-index: 1;
   }
 
@@ -254,7 +256,6 @@
   -->
   <video class="welcome-video"
          autoplay muted loop playsinline preload="auto"
-         poster="https://placehold.co/1920x1080/0A0A1F/0A0A1F.png"
          src="/media/welcome-hero.mp4"
          aria-hidden="true"></video>
 
