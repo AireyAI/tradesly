@@ -23,6 +23,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/aria-chat.css">
+<script src="/aria-chat.js" defer></script>
 <link rel="stylesheet" href="/niche.css">
 </head>
 <body>
@@ -60,6 +62,10 @@
         <h2>Get up to 3 quotes</h2>
         <p>Vetted local loft specialists. No phone calls, no spam.</p>
       </div>
+
+            <!-- Aria conversational intake (preferred). If she fails to load or the
+           user prefers form, the static form below stays available. -->
+      <div id="aria-chat" data-niche="loft-conversions" style="padding: var(--space-7) var(--space-7) 0;"></div>
 
       <form class="lead-form" id="leadForm" data-niche="loft-conversions" novalidate>
         <div class="field">
