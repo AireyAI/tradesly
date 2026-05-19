@@ -15,6 +15,48 @@
   const ENDPOINT = '/api/aria-chat';
   const STORAGE_KEY_HISTORY = 'aria_history_v1';
   const STORAGE_KEY_SESSION = 'aria_session_v1';
+  const STORAGE_KEY_ATTRIBUTION = 'aria_attribution_v1';
+
+  // First-touch attribution: capture UTM params + referrer on first landing,
+  // persist forever (until user clears storage). Survives session resets so
+  // we can still credit the paid channel that originally acquired the lead
+  // even if they submit weeks later.
+  function captureAttribution() {
+    try {
+      const existing = localStorage.getItem(STORAGE_KEY_ATTRIBUTION);
+      if (existing) return JSON.parse(existing);
+      const url = new URL(location.href);
+      const qp = url.searchParams;
+      const attribution = {
+        utm_source:   qp.get('utm_source')   || null,
+        utm_medium:   qp.get('utm_medium')   || null,
+        utm_campaign: qp.get('utm_campaign') || null,
+        utm_content:  qp.get('utm_content')  || null,
+        utm_term:     qp.get('utm_term')     || null,
+        ref:          qp.get('ref')          || null,  // QR-code shorthand
+        gclid:        qp.get('gclid')        || null,  // Google Ads click ID
+        fbclid:       qp.get('fbclid')       || null,  // Meta Ads click ID
+        landing_page: url.pathname,
+        referrer:     document.referrer || null,
+        captured_at:  new Date().toISOString(),
+      };
+      // Only persist if at least one signal is present — don't overwrite
+      // future direct visits' attribution with an empty record now.
+      const hasSignal = attribution.utm_source || attribution.ref ||
+                        attribution.gclid || attribution.fbclid ||
+                        (attribution.referrer &&
+                         !attribution.referrer.includes('tradesly.co.uk'));
+      if (hasSignal) {
+        localStorage.setItem(STORAGE_KEY_ATTRIBUTION, JSON.stringify(attribution));
+        return attribution;
+      }
+      // No signal — return a minimal "direct" record but don't persist,
+      // so a later attributed visit can overwrite this.
+      return { ...attribution, source_class: 'direct' };
+    } catch (e) {
+      return null;
+    }
+  }
 
   function makeId() {
     return 'sess-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -154,6 +196,7 @@
     let busy = false;
     let history = loadHistory(niche);
     const sessionId = getSessionId();
+    const attribution = captureAttribution();
 
     // Replay any prior history (e.g., user refreshed mid-conversation)
     for (const m of history) appendMessage(m.role === 'assistant' ? 'assistant' : 'user', m.content);
@@ -182,6 +225,7 @@
             history,
             start: history.length === 0,
             page_url: location.href,
+            attribution,
           }),
         });
         data = await r.json();

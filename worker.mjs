@@ -83,6 +83,46 @@ function badRequest(reason) {
   return jsonResponse(400, { error: 'bad_request', reason });
 }
 
+// ─── Lead source attribution ─────────────────────────────
+// Classifies a lead into a single canonical channel bucket so CPL-by-channel
+// queries don't have to re-derive the bucket on every read.
+//
+// Ladder order matters: we check the most unambiguous signals first
+// (paid click IDs), then utm_source, then ref= shorthand (postcards),
+// then fall through to referrer-based detection (organic search / social
+// referral). Default is 'direct' (typed URL / brand search / unknown).
+//
+// TODO(Kyle): adjust the bucket taxonomy if you want finer granularity
+// (e.g. split 'paid_social' into 'meta_ads' vs 'tiktok_ads'). For v1 the
+// 6 buckets below cover everything we'll be running for the next 90 days.
+function classifySource(attribution, referer) {
+  const a = attribution || {};
+  // 1. Unambiguous paid-click IDs (Google/Meta append these even without UTMs)
+  if (a.gclid) return 'paid_search';
+  if (a.fbclid) return 'paid_social';
+  // 2. Explicit UTM-driven attribution
+  const src = (a.utm_source || '').toLowerCase();
+  const med = (a.utm_medium || '').toLowerCase();
+  if (med === 'cpc' || med === 'ppc' || med === 'paidsearch') return 'paid_search';
+  if (med === 'paidsocial' || med === 'social-paid') return 'paid_social';
+  if (med === 'email') return 'email';
+  if (med === 'referral' || med === 'partner') return 'partner';
+  if (src === 'googleads' || src === 'google-ads') return 'paid_search';
+  if (src === 'meta' || src === 'facebook' || src === 'instagram') return 'paid_social';
+  if (src === 'reddit') return 'reddit';
+  // 3. Postcard QR codes use ?ref=postcard-<batch>
+  if (a.ref && a.ref.startsWith('postcard')) return 'postcard';
+  if (a.ref && a.ref.startsWith('partner-')) return 'partner';
+  // 4. Referrer-based fallback (organic search / social organic)
+  const ref = (referer || a.referrer || '').toLowerCase();
+  if (/google\.|bing\.|duckduckgo\.|yahoo\./.test(ref)) return 'organic_search';
+  if (/reddit\.com|facebook\.com|instagram\.com|tiktok\.com|x\.com|twitter\.com/.test(ref)) {
+    return 'organic_social';
+  }
+  // 5. Same-domain referrer or none → direct
+  return 'direct';
+}
+
 // ─── /api/lead handler ────────────────────────────────────
 async function handleLead(request, env) {
   let payload;
@@ -128,6 +168,10 @@ async function handleLead(request, env) {
       user_agent: request.headers.get('user-agent') || null,
       referer: request.headers.get('referer') || null,
       country: request.cf?.country || null,
+      channel: 'static-form',
+      attribution: payload.attribution || null,
+      source_class: classifySource(payload.attribution,
+        request.headers.get('referer')),
     },
     current_tier: 'T1',
     events: [
@@ -462,6 +506,12 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
             country: request.cf?.country || null,
             session_id,
             channel: 'aria-chat',
+            // First-touch attribution from the client (see aria-chat.js
+            // captureAttribution). source_class buckets it for analytics
+            // dashboards so we can answer "CPL by channel last 30 days?".
+            attribution: payload.attribution || null,
+            source_class: classifySource(payload.attribution,
+              request.headers.get('referer')),
           },
           current_tier: tier,
           events: [
