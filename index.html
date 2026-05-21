@@ -82,6 +82,9 @@
     display: grid; grid-template-columns: 1.05fr 0.95fr; gap: var(--space-11); align-items: center;
   }
   .hero h1 { margin-bottom: var(--space-6); }
+  /* Block-display lines for the 3-sentence hero — replaces brittle <br>
+     splitting that broke spacing under data-split JS. */
+  .hero-h1 .hero-line { display: block; }
   .hero .subtitle {
     font-size: var(--fs-body-lg); line-height: var(--lh-relaxed);
     color: var(--color-text-muted); max-width: 480px;
@@ -101,7 +104,12 @@
 
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; gap: var(--space-9); }
-    .hero { padding: var(--space-10) 0 var(--space-11); }
+    .hero { padding: var(--space-8) 0 var(--space-9); }
+    /* Mobile: tighten hero so CTA stays above the fold. The right-column
+       phone-mock used to push the CTA off-screen on iPhone 14-class viewports. */
+    .hero-h1 { font-size: clamp(2.25rem, 8vw, 3.5rem); line-height: 1.1; }
+    .hero .subtitle { font-size: var(--fs-body); margin-bottom: var(--space-6); }
+    .hero .cta-row { margin-bottom: var(--space-7); }
   }
 
   /* Hero right-side: live matches panel */
@@ -376,7 +384,11 @@
   <div class="hero-grid">
     <div>
       <div class="pill" data-appear><span class="pill-dot"></span>Launching across UK postcodes</div>
-      <h1 class="h1" data-split="words" style="margin-top:24px">Free quotes.<br>Vetted trades.<br><span class="text-grad">Sorted in 24h.</span></h1>
+      <h1 class="h1 hero-h1" data-reveal="fade-up" style="margin-top:24px">
+        <span class="hero-line">Free quotes.</span>
+        <span class="hero-line">Vetted trades.</span>
+        <span class="hero-line text-grad">Sorted in 24h.</span>
+      </h1>
       <p class="subtitle" data-appear data-appear-delay="0.4">Tell us what you need. Our matching engine finds up to three vetted local pros — and they reply, fast. No fees, no obligation, no chasing.</p>
       <div class="cta-row" data-appear data-appear-delay="0.5">
         <a href="#get-quotes" class="btn btn-primary lg" data-magnetic>
