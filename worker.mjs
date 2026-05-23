@@ -289,6 +289,14 @@ export default {
       return jsonResponse(200, { ok: true, ts: new Date().toISOString(), worker: true });
     }
 
+    // GET /pitch — personalised buyer-pitch landing page rendered from URL
+    // query params. Linked from every cold email (see buyer_outreach.py).
+    // Per Reply Rate Playbook §2 "preview-first outreach" — gives the prospect
+    // something concrete to look at BEFORE we ask anything.
+    if (request.method === 'GET' && url.pathname === '/pitch') {
+      return handlePitchPage(request, env);
+    }
+
     if (request.method !== 'POST') {
       return jsonResponse(405, { error: 'method_not_allowed' });
     }
@@ -546,5 +554,278 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
     confidence: parsed.confidence,
     lead_id,
     tier: lead_id ? tier : null,
+  });
+}
+
+// ─── /pitch handler — personalised buyer-pitch landing page ──────────────
+//
+// Linked from every cold email. URL shape:
+//   /pitch?biz=capital-scaffolding&niche=scaffolding&pc=S12&name=james
+//
+// Design rules (per session 2026-05-21):
+// - Mobile-first (tradespeople open on phone at jobsite)
+// - Server-rendered HTML (no JS framework — fast on 4G)
+// - All content escaped (XSS-safe — biz/name come from untrusted query)
+// - Brand: dark navy + cyan accent matching tradesly.co.uk
+// - 4 sections only: hero, sample lead, pricing, why-we-built-it
+// - 2 CTAs: reply-to-email (primary), WhatsApp/text (secondary)
+//
+// Honest framing ("just-shipped angle"): we acknowledge we launched recently
+// and our pricing is open to feedback. No "first 3 free" / "100s of leads"
+// overclaiming that the cold email already avoids.
+
+const PITCH_NICHE_PRICING = {
+  'heat-pumps':         { label: 'heat pump',          low: 80,  high: 250, sample_problem: 'New build 2-bed semi, looking to install air source heat pump. Currently on oil. Want quotes for system + install + grant paperwork.' },
+  'loft-conversions':   { label: 'loft conversion',    low: 60,  high: 200, sample_problem: '1930s semi, looking to convert loft into a master bedroom + ensuite. Already have basic plans, want quotes for full build.' },
+  'solar':              { label: 'solar PV',           low: 50,  high: 180, sample_problem: '3-bed detached, south-facing roof, looking at 4-6kW solar PV + battery. Want quotes including MCS install + grant info.' },
+  'driveways':          { label: 'driveway',           low: 25,  high: 80,  sample_problem: 'Replacing old tarmac drive with block paving. Approx 60sqm. Want quotes for removal + new install.' },
+  'garden-landscaping': { label: 'landscaping',        low: 30,  high: 100, sample_problem: 'Front + back garden re-design. Patio, turf, planted borders, small shed base. ~80sqm total.' },
+  'scaffolding':        { label: 'scaffolding',        low: 30,  high: 80,  sample_problem: 'Need scaffolding for chimney repair + roof work on a 2-storey semi. Likely 2-3 weeks hire.' },
+  'cleaning':           { label: 'cleaning',           low: 15,  high: 40,  sample_problem: 'End-of-tenancy deep clean on 2-bed flat. Includes carpets + appliances. Available for quote visit this week.' },
+  'drains-plumbing':    { label: 'drains / plumbing',  low: 20,  high: 60,  sample_problem: 'Blocked drain at the back of the house, water pooling. Need urgent diagnosis + clear. Possibly camera survey too.' },
+};
+
+// HTML-escape — prevents XSS via biz/name query params.
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Convert "capital-scaffolding-sheffield" → "Capital Scaffolding Sheffield"
+function unslug(s) {
+  if (!s) return 'your business';
+  return String(s)
+    .replace(/[^a-z0-9-]/gi, '')
+    .split('-')
+    .filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+async function handlePitchPage(request, env) {
+  const url = new URL(request.url);
+  const qp = url.searchParams;
+  const bizSlug   = (qp.get('biz')   || '').slice(0, 80);
+  const nicheSlug = (qp.get('niche') || '').slice(0, 40).toLowerCase();
+  const pc        = (qp.get('pc')    || '').slice(0, 8).toUpperCase();
+  const firstName = (qp.get('name')  || '').slice(0, 40);
+
+  const bizDisplay = unslug(bizSlug);
+  const greetName  = firstName ? firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase() : null;
+  const niche      = PITCH_NICHE_PRICING[nicheSlug] || {
+    label: 'job', low: 30, high: 100,
+    sample_problem: 'Homeowner project in your area, fully qualified before you see it.'
+  };
+  const pcDisplay = pc || 'your area';
+
+  // Synthetic-but-plausible sample homeowner. Names rotated by postcode hash
+  // so the same biz never sees two different samples on subsequent visits.
+  const SAMPLE_NAMES = ['Sarah K.', 'James M.', 'Priya S.', 'Tom R.', 'Anna H.', 'Mike L.', 'Lucy B.', 'David N.'];
+  const nameIdx = (pc.charCodeAt(0) || 0) % SAMPLE_NAMES.length;
+  const sampleName = SAMPLE_NAMES[nameIdx];
+  const sampleTimeframe = ['4-6 weeks', '2-3 weeks', '6-8 weeks', 'within a month', 'flexible'][nameIdx % 5];
+  const samplePhotos = (nameIdx % 3) + 1;
+
+  const replyMailto = 'mailto:apcapital.ai@gmail.com?subject=' +
+    encodeURIComponent(`Re: tradesly pricing check, ${greetName || 'kyle'}`);
+
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>${esc(bizDisplay)} preview · Tradesly</title>
+<meta name="robots" content="noindex">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #14142b;
+    --surface: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --text: #e8f4ff;
+    --muted: #8aa8c0;
+    --accent: #00d4ff;
+    --accent-2: #5a8cff;
+    --green: #4ade80;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(80,180,255,0.10), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(90,140,255,0.08), transparent 50%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+    padding: 24px 20px 48px;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 560px; margin: 0 auto; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-family: ui-monospace, monospace;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--surface);
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+  h1 {
+    font-size: clamp(28px, 7vw, 40px); line-height: 1.15;
+    margin: 16px 0 8px; letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .accent { color: var(--accent); }
+  .lede {
+    color: var(--muted); font-size: 16px; margin: 0 0 32px;
+  }
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  section h2 {
+    font-size: 13px; font-family: ui-monospace, monospace;
+    color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+  .sample-lead {
+    background: rgba(80,180,255,0.06);
+    border: 1px solid rgba(80,180,255,0.18);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .sample-lead .label { color: var(--muted); display: inline-block; min-width: 92px; }
+  .price-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .price-row:last-child { border-bottom: 0; }
+  .price-row .k { color: var(--muted); font-size: 14px; }
+  .price-row .v { font-size: 18px; font-weight: 600; color: var(--text); }
+  .price-row .v .small { color: var(--muted); font-size: 13px; font-weight: 400; }
+  .why { font-size: 15px; color: var(--text); margin: 6px 0; }
+  .why-list { margin: 0; padding: 0 0 0 18px; }
+  .why-list li { margin-bottom: 10px; color: var(--text); }
+  .why-list li::marker { color: var(--accent); }
+  .cta-block {
+    background: linear-gradient(135deg, rgba(0,212,255,0.10), rgba(90,140,255,0.06));
+    border: 1px solid rgba(0,212,255,0.22);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+    margin-top: 24px;
+  }
+  .cta-block h2 { color: var(--accent); }
+  .cta-primary {
+    display: inline-block; background: var(--accent); color: #001824;
+    padding: 14px 22px; border-radius: 10px; font-weight: 600;
+    text-decoration: none; font-size: 16px;
+    margin: 8px 0;
+    min-height: 48px; line-height: 22px;
+  }
+  .cta-secondary {
+    display: block; color: var(--text); text-decoration: none;
+    font-size: 15px; margin-top: 14px;
+    padding: 10px;
+  }
+  .cta-secondary .num { color: var(--accent); font-weight: 600; }
+  footer {
+    margin-top: 32px; text-align: center; font-size: 12px;
+    font-family: ui-monospace, monospace; color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  footer a { color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--border); }
+</style>
+</head>
+<body>
+<main>
+  <div class="badge"><span class="badge-dot"></span>Tradesly · launched May 2026</div>
+
+  <h1>${greetName ? esc(greetName) + ', here\'s the ' : 'The '}<span class="accent">60-second version</span>${greetName ? '' : ' for ' + esc(bizDisplay)}.</h1>
+  <p class="lede">${greetName ? 'Built this for ' + esc(bizDisplay) + '. ' : ''}A quick look at what a Tradesly lead in <strong>${esc(pcDisplay)}</strong> looks like, what we'd charge, and how it works.</p>
+
+  <section>
+    <h2>What you'd see in your inbox</h2>
+    <div class="sample-lead">
+<span class="label">Homeowner:</span> ${esc(sampleName)}<br>
+<span class="label">Postcode:</span>  ${esc(pcDisplay)}<br>
+<span class="label">Need:</span>      ${esc(niche.label)}<br>
+<span class="label">Problem:</span>   ${esc(niche.sample_problem)}<br>
+<span class="label">Timeframe:</span> ${esc(sampleTimeframe)}<br>
+<span class="label">Photos:</span>    ${samplePhotos} uploaded<br>
+<span class="label">Verified:</span>  ✓ email + postcode confirmed
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:14px 0 0;">(Sample format. Real leads include direct contact details once you accept.)</p>
+  </section>
+
+  <section>
+    <h2>Pricing for ${esc(niche.label)} in ${esc(pcDisplay)}</h2>
+    <div class="price-row">
+      <span class="k">Per qualified lead</span>
+      <span class="v">£${niche.low}-${niche.high}</span>
+    </div>
+    <div class="price-row">
+      <span class="k">Monthly fee</span>
+      <span class="v">£0 <span class="small">none</span></span>
+    </div>
+    <div class="price-row">
+      <span class="k">Commission on the job</span>
+      <span class="v">£0 <span class="small">none</span></span>
+    </div>
+    <div class="price-row">
+      <span class="k">Bad lead?</span>
+      <span class="v">credited <span class="small">reply DISPUTE within 24h</span></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why we built this</h2>
+    <ul class="why-list">
+      <li>Most lead services dump unverified enquiries on you, then charge whether you quote or not.</li>
+      <li>We pre-screen every homeowner — name, postcode, exact problem, timeframe, photos.</li>
+      <li>You only pay for leads that pass the screen. We refund the rest, no arguments.</li>
+      <li>We're new (launched May 2026). Pricing per region is open — that's why I'm asking you what £${niche.low} feels like.</li>
+    </ul>
+  </section>
+
+  <div class="cta-block">
+    <h2>Two ways to reply</h2>
+    <a class="cta-primary" href="${esc(replyMailto)}">Reply to my email</a>
+    <a class="cta-secondary" href="sms:+447497812186?body=tradesly%20${encodeURIComponent(bizSlug)}">
+      or text <span class="num">07497 812186</span>
+    </a>
+  </div>
+
+  <footer>
+    kyle airey · tradesly.co.uk · this preview is for ${esc(bizDisplay)} only · <a href="https://tradesly.co.uk">main site</a>
+  </footer>
+</main>
+</body>
+</html>`;
+
+  return new Response(html, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'public, max-age=300',
+      ...CORS_HEADERS,
+    },
   });
 }
