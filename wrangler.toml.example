@@ -8,10 +8,17 @@ name = "tradesly-intake"
 main = "worker.mjs"
 compatibility_date = "2026-05-13"
 
-# Route to attach this Worker to. Replace with your actual zone.
+# Routes to attach this Worker to. Replace with your actual zone.
 # Or use a Workers.dev subdomain for testing.
+#
+# IMPORTANT: list every URL path the worker should handle. Anything not
+# matched falls through to Cloudflare Pages (= 404 if no static file).
+# Bug history: on 2026-05-23 the /pitch route was omitted here and 11
+# cold emails went out linking to a 404. Always add new worker routes
+# BEFORE the cold emails reference them.
 # routes = [
-#   { pattern = "tradesly.co.uk/api/*", zone_name = "tradesly.co.uk" }
+#   { pattern = "tradesly.co.uk/api/*", zone_name = "tradesly.co.uk" },
+#   { pattern = "tradesly.co.uk/pitch*", zone_name = "tradesly.co.uk" }
 # ]
 
 [[kv_namespaces]]
