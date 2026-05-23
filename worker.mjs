@@ -574,15 +574,24 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
 // and our pricing is open to feedback. No "first 3 free" / "100s of leads"
 // overclaiming that the cold email already avoids.
 
+// Pricing v2 (2026-05-23) — recalibrated against UK PPL competitor research:
+// Bark.com raw lead pricing is the primary anchor (most direct competitor).
+// We price at +£5-£75 premium over Bark raw, justified by:
+//   - verified-only (not sold to 5 trades)
+//   - refund if dead (DISPUTE within 24h)
+//   - real screening (name, postcode, problem, timeframe, photos)
+// Even at premium, our effective cost-per-booked-job destroys Bark's because
+// they book 1-in-4-to-6 vs our target 1-in-2. Pricing will calibrate after
+// first 10 buyer replies via the pricing-check question in the cold email.
 const PITCH_NICHE_PRICING = {
-  'heat-pumps':         { label: 'heat pump',          low: 80,  high: 250, sample_problem: 'New build 2-bed semi, looking to install air source heat pump. Currently on oil. Want quotes for system + install + grant paperwork.' },
-  'loft-conversions':   { label: 'loft conversion',    low: 60,  high: 200, sample_problem: '1930s semi, looking to convert loft into a master bedroom + ensuite. Already have basic plans, want quotes for full build.' },
-  'solar':              { label: 'solar PV',           low: 50,  high: 180, sample_problem: '3-bed detached, south-facing roof, looking at 4-6kW solar PV + battery. Want quotes including MCS install + grant info.' },
-  'driveways':          { label: 'driveway',           low: 25,  high: 80,  sample_problem: 'Replacing old tarmac drive with block paving. Approx 60sqm. Want quotes for removal + new install.' },
-  'garden-landscaping': { label: 'landscaping',        low: 30,  high: 100, sample_problem: 'Front + back garden re-design. Patio, turf, planted borders, small shed base. ~80sqm total.' },
-  'scaffolding':        { label: 'scaffolding',        low: 30,  high: 80,  sample_problem: 'Need scaffolding for chimney repair + roof work on a 2-storey semi. Likely 2-3 weeks hire.' },
-  'cleaning':           { label: 'cleaning',           low: 15,  high: 40,  sample_problem: 'End-of-tenancy deep clean on 2-bed flat. Includes carpets + appliances. Available for quote visit this week.' },
-  'drains-plumbing':    { label: 'drains / plumbing',  low: 20,  high: 60,  sample_problem: 'Blocked drain at the back of the house, water pooling. Need urgent diagnosis + clear. Possibly camera survey too.' },
+  'heat-pumps':         { label: 'heat pump',          low: 75,  high: 150, sample_problem: 'New build 2-bed semi, looking to install air source heat pump. Currently on oil. Want quotes for system + install + grant paperwork.' },
+  'loft-conversions':   { label: 'loft conversion',    low: 60,  high: 120, sample_problem: '1930s semi, looking to convert loft into a master bedroom + ensuite. Already have basic plans, want quotes for full build.' },
+  'solar':              { label: 'solar PV',           low: 50,  high: 90,  sample_problem: '3-bed detached, south-facing roof, looking at 4-6kW solar PV + battery. Want quotes including MCS install + grant info.' },
+  'driveways':          { label: 'driveway',           low: 25,  high: 50,  sample_problem: 'Replacing old tarmac drive with block paving. Approx 60sqm. Want quotes for removal + new install.' },
+  'garden-landscaping': { label: 'landscaping',        low: 20,  high: 40,  sample_problem: 'Front + back garden re-design. Patio, turf, planted borders, small shed base. ~80sqm total.' },
+  'scaffolding':        { label: 'scaffolding',        low: 30,  high: 50,  sample_problem: 'Need scaffolding for chimney repair + roof work on a 2-storey semi. Likely 2-3 weeks hire.' },
+  'cleaning':           { label: 'cleaning',           low: 10,  high: 25,  sample_problem: 'End-of-tenancy deep clean on 2-bed flat. Includes carpets + appliances. Available for quote visit this week.' },
+  'drains-plumbing':    { label: 'drains / plumbing',  low: 15,  high: 30,  sample_problem: 'Blocked drain at the back of the house, water pooling. Need urgent diagnosis + clear. Possibly camera survey too.' },
 };
 
 // HTML-escape — prevents XSS via biz/name query params.
@@ -746,6 +755,19 @@ async function handlePitchPage(request, env) {
     padding: 10px;
   }
   .cta-secondary .num { color: var(--accent); font-weight: 600; }
+  /* WhatsApp button — green brand-green stands out from the cyan-accented
+     primary, gives users a clear "this is a different channel" cue. */
+  .cta-whatsapp {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25D366; color: #001a08;
+    padding: 14px 22px; border-radius: 10px; font-weight: 600;
+    text-decoration: none; font-size: 16px;
+    margin-top: 12px;
+    min-height: 48px; line-height: 22px;
+  }
+  .cta-whatsapp:hover { background: #1ebd5a; }
+  .cta-whatsapp .num { color: #001a08; font-weight: 700; }
+  .cta-whatsapp svg { flex-shrink: 0; }
   footer {
     margin-top: 32px; text-align: center; font-size: 12px;
     font-family: ui-monospace, monospace; color: var(--muted);
@@ -808,8 +830,11 @@ async function handlePitchPage(request, env) {
   <div class="cta-block">
     <h2>Two ways to reply</h2>
     <a class="cta-primary" href="${esc(replyMailto)}">Reply to my email</a>
-    <a class="cta-secondary" href="sms:+447497812186?body=tradesly%20${encodeURIComponent(bizSlug)}">
-      or text <span class="num">07497 812186</span>
+    <a class="cta-whatsapp" href="https://wa.me/447497812186?text=${encodeURIComponent('hi kyle — saw your tradesly preview for ' + bizDisplay)}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/>
+      </svg>
+      WhatsApp me · <span class="num">07497 812186</span>
     </a>
   </div>
 
