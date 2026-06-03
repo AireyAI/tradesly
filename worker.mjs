@@ -23,6 +23,7 @@
  */
 
 const VALID_NICHES = new Set([
+  'electrical',
   'heat-pumps', 'loft-conversions', 'solar', 'driveways',
   'garden-landscaping', 'scaffolding', 'cleaning', 'drains-plumbing',
 ]);
