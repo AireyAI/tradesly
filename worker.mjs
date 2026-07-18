@@ -23,6 +23,8 @@ import { LAUNCH, isLaunchPostcode, isLaunchOutward } from './launch-config.mjs';
  * them to ~/jarvis/agents/data/ppl/leads/ for the rest of the JARVIS pipeline.
  */
 
+import { cascadeChat } from './llm-cascade.mjs';
+
 const VALID_NICHES = new Set([
   'electrical',
   'heat-pumps', 'loft-conversions', 'solar', 'driveways',
@@ -345,8 +347,13 @@ export default {
 //   T3 if T2 + timeframe + clarified problem
 //   T4 if T3 + property_type + (specific_date or photos_offered)
 async function handleAriaChat(request, env) {
-  if (!env.ANTHROPIC_API_KEY) {
-    return jsonResponse(500, { error: 'aria_not_configured', detail: 'ANTHROPIC_API_KEY secret missing on worker' });
+  const hasAnyLlmKey = env.NVIDIA_API_KEY || env.OPENROUTER_API_KEY || env.MISTRAL_API_KEY
+    || env.GROQ_API_KEY || env.CEREBRAS_API_KEY;
+  if (!hasAnyLlmKey) {
+    return jsonResponse(500, {
+      error: 'aria_not_configured',
+      detail: 'No LLM provider secret set on worker — need at least one of NVIDIA_API_KEY, OPENROUTER_API_KEY, MISTRAL_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY',
+    });
   }
   let payload;
   try {
@@ -434,44 +441,26 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
     messages.push({ role: 'user', content: `[start of chat — homeowner just landed on the ${trade} page]` });
   }
 
-  let haikuResp;
+  let ariaText;
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 600,
-        system: systemPrompt,
-        messages,
-      }),
-    });
-    if (!r.ok) {
-      const errBody = await r.text();
-      console.error('[aria] Anthropic API failed:', r.status, errBody);
-      return jsonResponse(502, { error: 'haiku_failed', detail: `${r.status}: ${errBody.slice(0, 200)}` });
-    }
-    haikuResp = await r.json();
+    const result = await cascadeChat(env, { system: systemPrompt, messages });
+    ariaText = result.text;
   } catch (err) {
-    console.error('[aria] fetch threw:', err);
-    return jsonResponse(502, { error: 'haiku_unreachable' });
+    console.error('[aria] all LLM providers failed:', err.message);
+    return jsonResponse(502, { error: 'haiku_unreachable', detail: err.message.slice(0, 300) });
   }
 
   let parsed;
   try {
-    const raw = haikuResp.content?.[0]?.text || '';
+    const raw = ariaText || '';
     // Strip any accidental markdown fences
     const cleaned = raw.replace(/^```(?:json)?\s*/m, '').replace(/\s*```\s*$/m, '').trim();
-    // Pull the first {...} block in case Haiku adds prose around it
+    // Pull the first {...} block in case the model adds prose around it
     const start = cleaned.indexOf('{');
     const end = cleaned.lastIndexOf('}');
     parsed = JSON.parse(cleaned.slice(start, end + 1));
   } catch (err) {
-    console.error('[aria] parse failed:', err, haikuResp);
+    console.error('[aria] parse failed:', err, ariaText);
     return jsonResponse(502, { error: 'haiku_parse_failed' });
   }
 
