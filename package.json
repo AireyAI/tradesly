@@ -1,13 +1,12 @@
 {
   "name": "tradesly",
   "version": "0.1.0",
-  "description": "Tradesly — UK quote-matching marketplace connecting homeowners with vetted local trades.",
+  "description": "Tradesly \u2014 UK quote-matching marketplace connecting homeowners with vetted local trades.",
   "type": "module",
   "scripts": {
     "serve": "node serve.mjs",
-    "screenshot": "node screenshot.mjs",
-    "build": "tailwindcss -i src/input.css -o dist/styles.css --minify",
-    "watch": "tailwindcss -i src/input.css -o dist/styles.css --watch"
+    "build": "node build-pages.mjs",
+    "check": "node --check app.js && node --check build-pages.mjs && node --check serve.mjs"
   },
   "dependencies": {
     "puppeteer": "^22.15.0"

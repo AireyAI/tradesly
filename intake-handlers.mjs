@@ -1,3 +1,4 @@
+import { LAUNCH, isLaunchPostcode, isLaunchOutward } from './launch-config.mjs';
 /* Tradesly intake handlers — pure functions, no HTTP coupling.
  * Used by serve.mjs (dev) and a Cloudflare Worker (prod).
  * Storage: filesystem in dev, Workers KV in prod (swap writeJSON only).
@@ -105,6 +106,8 @@ export async function handleLead(payload, meta = {}) {
   const { niche_slug, postcode, email, problem, gdpr_consent, gdpr_consent_at } = payload;
 
   if (!niche_slug || !VALID_NICHES.has(niche_slug)) return badRequest('niche_slug missing or invalid');
+  if (niche_slug !== LAUNCH.niche) return badRequest('This launch covers garden and landscaping enquiries only.');
+  if (!isLaunchPostcode(postcode)) return badRequest('This launch covers BS postcode areas only.');
   if (!postcode || typeof postcode !== 'string') return badRequest('postcode missing');
   if (!UK_POSTCODE.test(postcode.trim().toUpperCase())) return badRequest('postcode not a valid UK format');
   if (!email || !EMAIL_RE.test(email.trim())) return badRequest('email invalid');
@@ -122,6 +125,7 @@ export async function handleLead(payload, meta = {}) {
   const lead = {
     id: leadId,
     niche_slug,
+    matching_policy: LAUNCH.matchingPolicy,
     created: now,
     consumer: {
       email: email.trim().toLowerCase(),
@@ -131,6 +135,8 @@ export async function handleLead(payload, meta = {}) {
       problem: problem.trim(),
       gdpr_consent: true,
       gdpr_consent_at,
+      consent_version: payload.consent_version || 'legacy-unversioned',
+      consent_scope: LAUNCH.matchingPolicy,
     },
     source: {
       ip: meta.ip || null,
@@ -176,6 +182,7 @@ export async function handleBuyerApply(payload, meta = {}) {
   if (!phone || typeof phone !== 'string') return badRequest('phone required');
   if (!Array.isArray(niches) || niches.length === 0) return badRequest('niches required');
   if (niches.some(n => !VALID_NICHES.has(n))) return badRequest('one or more niches invalid');
+  if (niches.length !== 1 || niches[0] !== LAUNCH.niche) return badRequest('Garden partner applications only during this launch.');
   if (!Array.isArray(postcodes) || postcodes.length === 0) return badRequest('postcodes required');
   if (typeof daily_cap !== 'number' || daily_cap < 1 || daily_cap > 50) return badRequest('daily_cap must be 1-50');
   if (!Array.isArray(tiers) || tiers.length === 0) return badRequest('tiers required');
@@ -197,6 +204,8 @@ export async function handleBuyerApply(payload, meta = {}) {
     .filter(Boolean)
     .filter((p, i, arr) => arr.indexOf(p) === i); // dedupe
 
+  if (cleanPostcodes.length === 0 || cleanPostcodes.some(p => !isLaunchOutward(p))) return badRequest('Partner coverage must use BS outward postcode areas.');
+
   const application = {
     id: buyerId,
     submitted: now,
@@ -214,6 +223,8 @@ export async function handleBuyerApply(payload, meta = {}) {
     credentials,
     terms_consent: true,
     terms_consent_at: now,
+    terms_version: payload.terms_version || 'legacy-unversioned',
+    matching_policy: LAUNCH.matchingPolicy,
     status: 'pending_verification',
     source: {
       ip: meta.ip || null,

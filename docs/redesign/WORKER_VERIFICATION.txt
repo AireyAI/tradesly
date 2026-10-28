@@ -1,0 +1,6 @@
+{
+  "checks": 12,
+  "passed": true,
+  "storage": "in-memory mock only",
+  "externalRequests": 0
+}

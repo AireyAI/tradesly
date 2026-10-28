@@ -1,0 +1,89 @@
+{
+  "axeVersion": "4.14.0",
+  "scans": [
+    {
+      "file": "index.html",
+      "width": 390,
+      "violations": [],
+      "passes": 25,
+      "incomplete": 0
+    },
+    {
+      "file": "garden-landscaping.html",
+      "width": 390,
+      "violations": [],
+      "passes": 25,
+      "incomplete": 0
+    },
+    {
+      "file": "for-tradespeople.html",
+      "width": 390,
+      "violations": [],
+      "passes": 24,
+      "incomplete": 0
+    },
+    {
+      "file": "privacy.html",
+      "width": 390,
+      "violations": [],
+      "passes": 20,
+      "incomplete": 0
+    },
+    {
+      "file": "terms.html",
+      "width": 390,
+      "violations": [],
+      "passes": 20,
+      "incomplete": 0
+    },
+    {
+      "file": "index.html",
+      "width": 1440,
+      "violations": [],
+      "passes": 25,
+      "incomplete": 0
+    },
+    {
+      "file": "garden-landscaping.html",
+      "width": 1440,
+      "violations": [],
+      "passes": 25,
+      "incomplete": 0
+    },
+    {
+      "file": "for-tradespeople.html",
+      "width": 1440,
+      "violations": [],
+      "passes": 24,
+      "incomplete": 0
+    },
+    {
+      "file": "privacy.html",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": 0
+    },
+    {
+      "file": "terms.html",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": 0
+    }
+  ],
+  "keyboardFocusTrap": true,
+  "reducedMotion": true,
+  "mobileLab": {
+    "viewport": "390x844",
+    "latencyMs": 150,
+    "downloadMbps": 1.6,
+    "cpuSlowdown": 4,
+    "lcp": 1588,
+    "cls": 0.0005439236684042507,
+    "resources": 7,
+    "transferBytes": 279116
+  },
+  "note": "Local preview sample, not Lighthouse or field data. Automated checks are not a complete accessibility audit.",
+  "contrastRechecked": true
+}

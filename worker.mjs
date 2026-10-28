@@ -1,3 +1,4 @@
+import { LAUNCH, isLaunchPostcode, isLaunchOutward } from './launch-config.mjs';
 /* Tradesly Cloudflare Worker — production intake API
  *
  * Mirrors the validation + Telegram logic of intake-handlers.mjs but uses
@@ -136,6 +137,8 @@ async function handleLead(request, env) {
   const { niche_slug, postcode, email, problem, gdpr_consent, gdpr_consent_at } = payload;
 
   if (!niche_slug || !VALID_NICHES.has(niche_slug)) return badRequest('niche_slug missing or invalid');
+  if (niche_slug !== LAUNCH.niche) return badRequest('This launch covers garden and landscaping enquiries only.');
+  if (!isLaunchPostcode(postcode)) return badRequest('This launch covers BS postcode areas only.');
   if (!postcode || typeof postcode !== 'string' || !UK_POSTCODE.test(postcode.trim().toUpperCase())) {
     return badRequest('postcode invalid');
   }
@@ -153,6 +156,7 @@ async function handleLead(request, env) {
   const lead = {
     id: leadId,
     niche_slug,
+    matching_policy: LAUNCH.matchingPolicy,
     created: now,
     consumer: {
       email: email.trim().toLowerCase(),
@@ -162,6 +166,8 @@ async function handleLead(request, env) {
       problem: problem.trim(),
       gdpr_consent: true,
       gdpr_consent_at,
+      consent_version: payload.consent_version || 'legacy-unversioned',
+      consent_scope: LAUNCH.matchingPolicy,
     },
     source: {
       ip: request.headers.get('cf-connecting-ip') || null,
@@ -220,6 +226,7 @@ async function handleBuyerApply(request, env) {
   if (!phone || typeof phone !== 'string') return badRequest('phone required');
   if (!Array.isArray(niches) || niches.length === 0) return badRequest('niches required');
   if (niches.some(n => !VALID_NICHES.has(n))) return badRequest('one or more niches invalid');
+  if (niches.length !== 1 || niches[0] !== LAUNCH.niche) return badRequest('Garden partner applications only during this launch.');
   if (!Array.isArray(postcodes) || postcodes.length === 0) return badRequest('postcodes required');
   if (typeof daily_cap !== 'number' || daily_cap < 1 || daily_cap > 50) return badRequest('daily_cap must be 1-50');
   if (!Array.isArray(tiers) || tiers.length === 0) return badRequest('tiers required');
@@ -233,6 +240,8 @@ async function handleBuyerApply(request, env) {
     .map(p => String(p).trim().toUpperCase())
     .filter(Boolean)
     .filter((p, i, arr) => arr.indexOf(p) === i);
+
+  if (cleanPostcodes.length === 0 || cleanPostcodes.some(p => !isLaunchOutward(p))) return badRequest('Partner coverage must use BS outward postcode areas.');
 
   const application = {
     id: buyerId,
@@ -251,6 +260,8 @@ async function handleBuyerApply(request, env) {
     credentials: payload.credentials ? String(payload.credentials).trim() : null,
     terms_consent: true,
     terms_consent_at: now,
+    terms_version: payload.terms_version || 'legacy-unversioned',
+    matching_policy: LAUNCH.matchingPolicy,
     status: 'pending_verification',
     source: {
       ip: request.headers.get('cf-connecting-ip') || null,
@@ -295,7 +306,9 @@ export default {
     // Per Reply Rate Playbook §2 "preview-first outreach" — gives the prospect
     // something concrete to look at BEFORE we ask anything.
     if (request.method === 'GET' && url.pathname === '/pitch') {
-      return handlePitchPage(request, env);
+      const destination = new URL('/for-tradespeople.html', url);
+      destination.search = url.search;
+      return Response.redirect(destination.toString(), 302);
     }
 
     if (request.method !== 'POST') {
@@ -345,6 +358,7 @@ async function handleAriaChat(request, env) {
   const niche_slug = payload.niche_slug;
   const history = Array.isArray(payload.history) ? payload.history : [];
   const session_id = (payload.session_id || '').slice(0, 64);
+  if (niche_slug !== LAUNCH.niche) return badRequest('This launch covers Bristol garden enquiries only.');
 
   if (!niche_slug || !VALID_NICHES.has(niche_slug)) {
     return badRequest('niche_slug missing or invalid');
@@ -483,7 +497,7 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
         // Aria extracted a malformed email — fall back to ready_to_submit so frontend can re-ask
         parsed.stage = 'ready_to_submit';
         parsed.missing = ['email'];
-      } else if (!UK_POSTCODE.test(cleanPostcode)) {
+      } else if (!UK_POSTCODE.test(cleanPostcode) || !isLaunchPostcode(cleanPostcode)) {
         parsed.stage = 'ready_to_submit';
         parsed.missing = ['postcode'];
       } else {
@@ -492,6 +506,7 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
         const lead = {
           id: lead_id,
           niche_slug,
+          matching_policy: LAUNCH.matchingPolicy,
           created: now,
           consumer: {
             name: String(ex.name).slice(0, 100),
@@ -506,6 +521,8 @@ If user says STOP / unsubscribe / "remove me" / "go away", set stage="stopped" a
             photos_offered: !!ex.photos_offered,
             gdpr_consent: true,
             gdpr_consent_at: now,
+            consent_version: payload.consent_version || 'legacy-aria-consent',
+            consent_scope: LAUNCH.matchingPolicy,
           },
           source: {
             ip: request.headers.get('cf-connecting-ip') || null,
